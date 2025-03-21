@@ -29,8 +29,8 @@ app.use(cors({ origin: 'http://localhost:4200' }));
 app.use(express.json({ limit: '10kb' }));
 app.use(limiter); 
 
-
-app.use('/api/profesores', verificarToken, profesoresRoutes);
+const dataRoutes = require('./routes/profesores.routes.js'); 
+app.use('/api', dataRoutes,verificarToken, profesoresRoutes);
 
 app.use(
   express.static(browserDistFolder, {
@@ -49,7 +49,7 @@ app.use('/**', (req, res, next) => {
     .catch(next);
 });
 
-// Iniciar el servidor
+
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
   app.listen(port, () => {
