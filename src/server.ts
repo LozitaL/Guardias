@@ -29,8 +29,8 @@ app.use(cors({ origin: 'http://localhost:4200' }));
 app.use(express.json({ limit: '10kb' }));
 app.use(limiter); 
 
-const dataRoutes = require('./routes/profesores.routes.js'); 
-app.use('/api', dataRoutes,verificarToken, profesoresRoutes);
+ 
+app.use('/api/',profesoresRoutes, verificarToken);
 
 app.use(
   express.static(browserDistFolder, {
