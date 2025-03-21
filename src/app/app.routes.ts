@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
-import { PerfilComponent } from './perfil/perfil.component';
+import { LoginComponent } from './login/login.component';
+import { BaseComponent } from './base/base.component';
 export const routes: Routes = [
-    {path: '', component: PerfilComponent},
+    {path: '', component: LoginComponent, title:'Login'},
+    {path: 'Sesion/:id', component:BaseComponent, title:'Inicio'},
     
 ];
