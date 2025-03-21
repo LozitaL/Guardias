@@ -7,4 +7,3 @@ import { provideRouter } from '@angular/router';
 bootstrapApplication(AppComponent,{
   providers:[provideRouter(routes)]
 }) .catch((err) => console.error(err));
-cls
