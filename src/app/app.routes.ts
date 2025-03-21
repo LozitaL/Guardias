@@ -1,3 +1,6 @@
 import { Routes } from '@angular/router';
-
-export const routes: Routes = [];
+import { PerfilComponent } from './perfil/perfil.component';
+export const routes: Routes = [
+    {path: '', component: PerfilComponent},
+    
+];
