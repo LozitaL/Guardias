@@ -4,13 +4,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 95vh;
     margin: 0;
+    padding: 0;
 }
 
 .container {
     background: white;
-    width: 900px;
+    width: 80vw;
     display: flex;
     border-radius: 10px;
     overflow: hidden;
