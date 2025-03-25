@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-usuario',
@@ -11,13 +12,13 @@ import { CommonModule } from '@angular/common';
 })
 export class UsuarioComponent implements OnInit {
   userId: string | null = null;
+  
+  constructor(private authService: AuthService) {}
 
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.route.paramMap.subscribe((params) => {
-      this.userId = params.get('id');
-    });
+  ngOnInit() {
+    const user = this.authService.getCurrentUser(); 
+    
+    this.userId = user.id_profesor;
   }
-}
 
+}

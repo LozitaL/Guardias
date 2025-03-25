@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { CommonModule } from '@angular/common';
+import { lastValueFrom } from 'rxjs';
+import { CommonModule } from '@angular/common';  
 
 @Component({
   selector: 'app-login',
-  standalone: true,  
-  imports: [CommonModule, ReactiveFormsModule], 
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  imports: [CommonModule,ReactiveFormsModule],
 })
 export class LoginComponent {
   loginForm: FormGroup;
+  errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -25,19 +27,24 @@ export class LoginComponent {
     });
   }
 
-  onSubmit() {
+  
+  async onSubmit() {
     const { username, password } = this.loginForm.value;
 
-    this.authService.login(username, password).subscribe(
-      (response) => {
+    try {
+      
+      const response = await lastValueFrom(this.authService.login(username, password));
+
+      
+      if (response && response.token) {
         localStorage.setItem('currentUser', JSON.stringify(response));
-        this.router.navigate([`/usuario/${response.id_profesor}`]);
-      },
-      (error) => {
-        console.error('Error de login:', error);
-        alert('Credenciales incorrectas');
+        this.authService.getCurrentUser().next(response); 
+        this.router.navigate([`/usuario/${response.id_profesor}`]); 
+        this.errorMessage = ''; 
       }
-    );
+    } catch (error) {
+      console.error('Error de login:', error);
+      this.errorMessage = 'Has escrito de forma incorrecta el nombre de usuario o la contraseña.';
+    }
   }
 }
-

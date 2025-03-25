@@ -47,7 +47,12 @@ body {
     flex-direction: column;
     margin-bottom: 15px;
 }
-
+.error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+    font-weight: lighter;
+}
 .input-group label {
     font-size: 14px;
     margin-bottom: 5px;
