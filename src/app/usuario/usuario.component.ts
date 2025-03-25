@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-usuario',
   standalone: true,
-  imports: [CommonModule],  
+  imports: [CommonModule, HeaderComponent],  
   templateUrl: './usuario.component.html',
   styleUrls: ['./usuario.component.css']
 })
