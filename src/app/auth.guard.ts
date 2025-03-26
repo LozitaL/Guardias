@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
     const requestedUserId = route.paramMap.get('id'); 
 
     if (!currentUser) {
-      this.router.navigate(['/login']);
+      this.router.navigate(['']);
       return false;
     }
 
