@@ -30,7 +30,12 @@ export class AuthService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+        return response.json();  
+      })
       .then((data) => {
         if (data && data.token && isPlatformBrowser(this.platformId)) {
           localStorage.setItem('currentUser', JSON.stringify(data));
@@ -38,15 +43,24 @@ export class AuthService {
           this.router.navigate([`/usuario/${data.id_profesor}`]);
         }
         return data;
+      })
+      .catch((error) => {
+        if (error.message.includes('401')) {
+          console.log('Credenciales incorrectas. Inténtalo nuevamente.');
+        } else {
+          console.log('Hubo un error al intentar iniciar sesión. Por favor, inténtalo más tarde.');
+        }
+        return Promise.reject(error); 
       });
   }
+  
 
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('currentUser');
     }
     this.currentUserSubject.next(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['']);
   }
 
   getCurrentUser(): any {
