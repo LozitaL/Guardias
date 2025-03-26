@@ -1,0 +1,33 @@
+<div class="content">
+    <aside class="sidebar">
+      <ul>
+        <li (click)="changeView('inicio')">Inicio</li>
+        <li (click)="changeView('perfil')">Perfil</li>
+        <li (click)="changeView('mensajes')">Mensajes</li>
+        <li (click)="changeView('documentos')">Documentos</li>
+      </ul>
+    </aside>
+    <main class="main-content">
+      <ng-container [ngSwitch]="currentView">
+        <div *ngSwitchCase="'inicio'">
+          <app-body></app-body>
+        </div>
+        <div *ngSwitchCase="'perfil'">
+          <h2>Perfil</h2>
+          <p>Esta es la información de tu perfil.</p>
+        </div>
+        <div *ngSwitchCase="'mensajes'">
+          <h2>Mensajes</h2>
+          <p>Aquí están tus mensajes importantes.</p>
+        </div>
+        <div *ngSwitchCase="'documentos'">
+          <h2>Documentos</h2>
+          <p>Consulta tus documentos aquí.</p>
+        </div>
+        <div *ngSwitchDefault>
+          <h2>Selecciona una opción</h2>
+        </div>
+      </ng-container>
+    </main>
+  </div>
+  
