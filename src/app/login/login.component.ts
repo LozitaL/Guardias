@@ -29,7 +29,9 @@ export class LoginComponent {
 
   
   async onSubmit() {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      return;
+    }
   
     const { username, password } = this.loginForm.value;
   
@@ -45,4 +47,5 @@ export class LoginComponent {
       this.errorMessage = 'Error al iniciar sesión';
     }
   }
+  
 }
