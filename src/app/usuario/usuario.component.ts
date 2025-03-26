@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth.service';
 import { HeaderComponent } from '../header/header.component';
+import { ModalComponent } from "../modal/modal.component";
 
 @Component({
   selector: 'app-usuario',
   standalone: true,
-  imports: [CommonModule, HeaderComponent],  
+  imports: [CommonModule, HeaderComponent, ModalComponent],  
   templateUrl: './usuario.component.html',
   styleUrls: ['./usuario.component.css']
 })
