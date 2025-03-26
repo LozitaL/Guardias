@@ -29,22 +29,20 @@ export class LoginComponent {
 
   
   async onSubmit() {
+    if (this.loginForm.invalid) return;
+  
     const { username, password } = this.loginForm.value;
-
+  
     try {
-      
-      const response = await lastValueFrom(this.authService.login(username, password));
-
-      
+      const response = await this.authService.login(username, password);
+  
       if (response && response.token) {
-        localStorage.setItem('currentUser', JSON.stringify(response));
-        this.authService.getCurrentUser().next(response); 
-        this.router.navigate([`/usuario/${response.id_profesor}`]); 
-        this.errorMessage = ''; 
+        this.router.navigate([`/usuario/${response.id_profesor}`]);
+      } else {
+        this.errorMessage = 'Credenciales incorrectas';
       }
     } catch (error) {
-      console.error('Error de login:', error);
-      this.errorMessage = 'Has escrito de forma incorrecta el nombre de usuario o la contraseña.';
+      this.errorMessage = 'Error al iniciar sesión';
     }
   }
 }

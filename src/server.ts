@@ -35,12 +35,20 @@ app.use(
 
 app.use('/**', (req, res, next) => {
   angularApp
-    .handle(req)
-    .then((response) => response ? res.send(response.body) : next())
+    .handle(req) 
+    .then((response) => {
+      if (response) {
+        res.send(response.body);  
+      } else {
+        next();
+      }
+    })
     .catch(next);
 });
+export const reqHandler = angularApp.handle;
 
 const port = process.env['PORT'] || 4000;
 app.listen(port, () => {
   console.log(`✅ Servidor corriendo en http://localhost:${port}`);
 });
+

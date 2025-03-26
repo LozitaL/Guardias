@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
@@ -12,28 +11,40 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
 
-  constructor(private http: HttpClient, private router: Router) {
-    const storedUser = localStorage.getItem('currentUser');
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router) {
+    let storedUser = null;
+
+    if (isPlatformBrowser(this.platformId)) {
+      storedUser = localStorage.getItem('currentUser');
+    }
+
     this.currentUserSubject = new BehaviorSubject<any>(
       storedUser ? JSON.parse(storedUser) : null
     );
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post<any>(this.apiUrl, { username, password }).pipe(
-      tap((response) => {
-        if (response && response.token) {
-          localStorage.setItem('currentUser', JSON.stringify(response));
-          this.currentUserSubject.next(response);
-          this.router.navigate([`/usuario/${response.id_profesor}`]);
+  login(username: string, password: string): Promise<any> {
+    return fetch(this.apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data && data.token && isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('currentUser', JSON.stringify(data));
+          this.currentUserSubject.next(data);
+          this.router.navigate([`/usuario/${data.id_profesor}`]);
         }
-      })
-    );
+        return data;
+      });
   }
 
   logout(): void {
-    localStorage.removeItem('currentUser');
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('currentUser');
+    }
     this.currentUserSubject.next(null);
     this.router.navigate(['/login']);
   }
@@ -43,6 +54,6 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.getCurrentUser(); 
+    return !!this.getCurrentUser();
   }
 }
