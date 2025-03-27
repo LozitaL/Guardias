@@ -5,6 +5,7 @@ import { AngularNodeAppEngine } from '@angular/ssr/node';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import authRouter from '../src/service/auth';  
+import datosRouter from '../src/service/datos'; 
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -21,7 +22,7 @@ app.use(cors({
 
 app.use(bodyParser.json()); 
 
-
+app.use('/api', datosRouter); 
 app.use('/api', authRouter);
 
 

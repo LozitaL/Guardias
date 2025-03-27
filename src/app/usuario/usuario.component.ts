@@ -13,13 +13,20 @@ import { ModalComponent } from "../modal/modal.component";
 })
 export class UsuarioComponent implements OnInit {
   userId: string | null = null;
-  
+  dataLoaded: boolean = false; 
+
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
     const user = this.authService.getCurrentUser(); 
-    
-    this.userId = user.id_profesor;
+    if (user) {
+      this.userId = user.id_profesor;
+    }
+    this.authService.getCurrentDataUser().subscribe((data) => {
+      if (data) {
+        this.dataLoaded = true; 
+      }
+    });
   }
 
 }

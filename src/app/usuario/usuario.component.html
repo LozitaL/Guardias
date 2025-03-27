@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-  <div class="usuario-container">
-    <app-header></app-header>
-    <app-modal></app-modal>
-    
-    <!--<h2>Bienvenido al perfil de usuario</h2>
-    <p *ngIf="userId; else cargando">Tu ID de usuario es: {{ userId }}</p>
+
+<div [class.contenido-cargando]="!dataLoaded" [class.contenido-visible]="dataLoaded">
+  <app-header *ngIf="dataLoaded"></app-header>
+<app-modal *ngIf="dataLoaded"></app-modal>
+</div>
   
-    <ng-template #cargando>
-      <p>Cargando datos del usuario...</p>
-    </ng-template>
-     -->
-    
-  </div>
-</html>
+  <ng-template #cargando>
+    <p>Cargando...</p>
+  </ng-template>
+
