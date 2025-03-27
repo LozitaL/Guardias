@@ -44,17 +44,16 @@ export class BodyComponent {
       "13:35-14:30": "hora6"
     };
   
-    const horaKey = horasMap[hora]; // Convierte la hora en la clave correspondiente
+    const horaKey = horasMap[hora]; 
     if (!horaKey || !this.userHorario?.[dia]?.[horaKey]) {
-      return []; // Si no hay datos para esa hora, retorna un array vacío
+      return []; 
     }
   
     const datos = this.userHorario[dia][horaKey];
     if (!datos) {
-      return []; // Asegúrate de que datos no sea undefined o null
+      return []; 
     }
   
-    // Si los datos son un string ("libre"), retorna un array vacío
     return Array.isArray(datos) ? datos : (datos === "libre" ? [] : [datos]);
   }
 
