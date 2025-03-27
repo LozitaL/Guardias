@@ -9,9 +9,11 @@
     <tbody>
         <tr *ngFor="let hora of ['8:30-9:25', '9:25-10:20', '10:40-11:35', '11:35-12:30', '12:40-13:35', '13:35-14:30']">
             <td>{{ hora }}</td>
+            
             <ng-container *ngIf="hora === '10:20-10:40' || hora === '12:30-12:40'; else horarioNormal">
                 <td colspan="5" class="recreo">Recreo</td>
             </ng-container>
+
             <ng-template #horarioNormal>
                 <td *ngFor="let dia of ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']">
                     <ng-container *ngIf="getDatos(dia, hora) as datos">
@@ -28,6 +30,5 @@
         </tr>
     </tbody>
 </table>
+
 <p *ngIf="!userHorario">No hay horario disponible.</p>
-
-

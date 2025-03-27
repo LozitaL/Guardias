@@ -57,12 +57,6 @@ export class BodyComponent {
     return Array.isArray(datos) ? datos : (datos === "libre" ? [] : [datos]);
   }
 
-  filasValidas(dia: any): number {
-    return Object.values(dia).reduce((count: number, datos: any) => {
-      return count + (Array.isArray(datos) ? datos.length : 1);
-    }, 0);
-  }
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
