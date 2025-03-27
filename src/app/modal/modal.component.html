@@ -1,22 +1,21 @@
 <div class="content">
     <aside class="sidebar">
       <ul>
-        <li (click)="changeView('inicio')">Inicio</li>
-        <li (click)="changeView('perfil')">Perfil</li>
-        <li (click)="changeView('mensajes')">Mensajes</li>
+        <li (click)="changeView('Horario')">Horario</li>
+        <li (click)="changeView('Guardias')">Guardias</li>
+        <li (click)="changeView('Notificaciónes')">Notificaciónes</li>
         <li (click)="changeView('documentos')">Documentos</li>
       </ul>
     </aside>
     <main class="main-content">
       <ng-container [ngSwitch]="currentView">
-        <div *ngSwitchCase="'inicio'">
+        <div *ngSwitchCase="'Horario'">
           <app-body></app-body>
         </div>
-        <div *ngSwitchCase="'perfil'">
-          <h2>Perfil</h2>
-          <p>Esta es la información de tu perfil.</p>
+        <div *ngSwitchCase="'Guardias'">
+          <p>Aqui se organizaran las guardias</p>
         </div>
-        <div *ngSwitchCase="'mensajes'">
+        <div *ngSwitchCase="'Notificaciónes'">
           <h2>Mensajes</h2>
           <p>Aquí están tus mensajes importantes.</p>
         </div>

@@ -48,7 +48,7 @@ app.use('/**', (req, res, next) => {
 });
 export const reqHandler = angularApp.handle;
 
-const port = process.env['PORT'] || 4000;
+const port = process.env['PORT'] ||4000;
 app.listen(port, () => {
   console.log(`✅ Servidor corriendo en http://localhost:${port}`);
 });
