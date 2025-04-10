@@ -1,34 +1,84 @@
+<nav>
 <h2>Horario</h2>
-<table *ngIf="userHorario">
-    <thead>
-        <tr>
+<button (click)="Editar()"></button>
+</nav>
+@switch (modoEdicion) {
+    @case(true) {
+      <table>
+        <thead>
+          <tr>
             <th>Hora</th>
-            <th *ngFor="let dia of ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']">{{ dia }}</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let hora of ['8:30-9:25', '9:25-10:20', '10:40-11:35', '11:35-12:30', '12:40-13:35', '13:35-14:30']">
-            <td>{{ hora }}</td>
-            
-            <ng-container *ngIf="hora === '10:20-10:40' || hora === '12:30-12:40'; else horarioNormal">
+            @for (dia of getDias(); track dia) {
+              <th>{{ dia }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (hora of ['8:30-9:25', '9:25-10:20', '10:40-11:35', '11:35-12:30', '12:40-13:35', '13:35-14:30']; track hora) {
+            <tr>
+              <td>{{ hora }}</td>
+              @if (hora === '10:20-10:40' || hora === '12:30-12:40') {
                 <td colspan="5" class="recreo">Recreo</td>
-            </ng-container>
-
-            <ng-template #horarioNormal>
-                <td *ngFor="let dia of ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']">
-                    <ng-container *ngIf="getDatos(dia, hora) as datos">
-                        <span *ngIf="datos.length > 0; else libre">
-                            <span *ngFor="let dato of datos">
-                                <div>{{ dato?.Asignatura || '-' }}</div>  
-                                <small>{{ dato?.Curso || '-' }} - {{ dato?.Clase || '-' }}</small>
-                            </span>
-                        </span>
-                        <ng-template #libre>-</ng-template>
-                    </ng-container>
-                </td>
-            </ng-template>
-        </tr>
-    </tbody>
-</table>
-
-<p *ngIf="!userHorario">No hay horario disponible.</p>
+              } @else {
+                @for (dia of getDias(); track dia) {
+                  <td>
+                    <input 
+                      type="text"
+                      [value]="getDatos(dia, hora)[0]?.asignatura || ''"
+                      (input)="onEditarCelda(dia, hora, $any($event.target).value)"
+                      placeholder="Asignatura"
+                    />
+                  </td>
+                }
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+      <button (click)="guardarCambios()">Guardar cambios</button>
+    }
+    @default {
+        @if (userHorario) {
+            <table>
+              <thead>
+                <tr>
+                  <th>Hora</th>
+                  @for (dia of ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; track dia) {
+                    <th>{{ dia }}</th>
+                  }
+                </tr>
+              </thead>
+              <tbody>
+                @for (hora of ['8:30-9:25', '9:25-10:20', '10:40-11:35', '11:35-12:30', '12:40-13:35', '13:35-14:30']; track hora) {
+                  <tr>
+                    <td>{{ hora }}</td>
+          
+                    @if (hora === '10:20-10:40' || hora === '12:30-12:40') {
+                      <td colspan="5" class="recreo">Recreo</td>
+                    } @else {
+                      @for (dia of ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; track dia) {
+                        <td>
+                          @let datos = getDatos(dia, hora);
+                          @if (datos) {
+                               @if (datos.length > 0) {
+                                   @for (dato of datos; track $index) {
+                                      <div>{{ dato?.asignatura || '' }}</div>
+                              <small>{{ dato?.curso || '' }} {{ dato?.clase || '' }}</small>
+                          }
+                               } @else {
+                                   <small>Libre</small>
+            }
+          }
+                        </td>
+                      }
+                    }
+                  </tr>
+                }
+              </tbody>
+            </table>
+          } @else {
+            <p>No hay horario disponible.</p>
+          }
+          
+    }
+  }

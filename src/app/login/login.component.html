@@ -1,48 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio de Sesión</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio de Sesión</title>
 </head>
 <body>
   <div class="componente">
     <div class="container">
-        <div class="left-panel">
-            <img src="assets/images/IESVM.jpg" alt="Ilustración de inicio de sesión">
+      <div class="left-panel">
+        <img src="assets/images/IESVM.jpg" alt="Ilustración de inicio de sesión">
+      </div>
+
+      <div class="right-panel">
+        <h2>Inicia Sesión</h2>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          
+          <div class="input-group">
+            <label for="correo">Correo</label>
+            <input type="text" id="correo" formControlName="username" placeholder="Ingresa tu correo electrónico" required>
+
+            @if (loginForm.controls['username'].invalid && loginForm.controls['username'].touched) {
+              <div class="error2">
+                @if (loginForm.controls['username'].hasError('required')) {
+                  <span>El correo es requerido</span>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="input-group">
+            <label for="password">Contraseña</label>
+            <input type="password" id="password" formControlName="password" placeholder="Ingresa tu contraseña" required>
+
+            @if (loginForm.controls['password'].invalid && loginForm.controls['password'].touched) {
+              <div class="error2">
+                @if (loginForm.controls['password'].hasError('required')) {
+                  <span>La contraseña es requerida</span>
+                }
+              </div>
+            }
+          </div>
+
+          @if (errorMessage) {
+            <p class="error-message">{{ errorMessage }}</p>
+          }
+
+          <button class="login-button" [disabled]="loginForm.invalid">Iniciar sesión</button>
+        </form>
+
+        <div class="extra-links">
+          <a href="#">Soporte técnico y contacto</a>
+          <a href="#">Tengo problemas de acceso</a>
         </div>
-        <div class="right-panel">
-            <h2>Inicia Sesión</h2>
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-           
-                <div class="input-group">
-                    <label for="correo">Correo</label>
-                    <input type="text" id="correo" formControlName="username" placeholder="Ingresa tu correo electrónico" required>
-                    <div *ngIf="loginForm.controls['username'].invalid && loginForm.controls['username'].touched">
-                      <div class="error2">
-                        <span *ngIf="loginForm.controls['username'].hasError('required')">El correo es requerido</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div class="input-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" id="password" formControlName="password" placeholder="Ingresa tu contraseña" required>
-                    <div *ngIf="loginForm.controls['password'].invalid && loginForm.controls['password'].touched">
-                      <div class="error2">
-                        <span *ngIf="loginForm.controls['password'].hasError('required')">La contraseña es requerida</span>
-                      </div>
-                    </div>
-                  </div>
-                <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
-                <button class="login-button" [disabled]="loginForm.invalid">Iniciar sesión</button>
-            </form>
-            <div class="extra-links">
-                <a href="#">Soporte técnico y contacto</a>
-                <a href="#">Tengo problemas de acceso</a>
-            </div>
-            <hr>
-        </div>
+
+        <hr>
+      </div>
     </div>
   </div>
 </body>

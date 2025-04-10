@@ -79,7 +79,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
       return response.json();
   }
 
-  async updateDatos(id: string, nombre?: string, apellidos?: string, curso?: string, foto?: string, horario?: string) {
+  async updateDatos(id: Number, nombre?: string, apellidos?: string, curso?: string, foto?: string, horario?: JSON) {
     const updateData: any = {};
 
     if (nombre) updateData.nombre = nombre;

@@ -1,32 +1,33 @@
 <div class="content">
-    <aside class="sidebar">
-      <ul>
-        <li (click)="changeView('Horario')">Horario</li>
-        <li (click)="changeView('Guardias')">Guardias</li>
-        <li (click)="changeView('Notificaciónes')">Notificaciónes</li>
-        <li (click)="changeView('documentos')">Documentos</li>
-      </ul>
-    </aside>
-    <main class="main-content">
-      <ng-container [ngSwitch]="currentView">
-        <div *ngSwitchCase="'Horario'">
-          <app-body></app-body>
-        </div>
-        <div *ngSwitchCase="'Guardias'">
-          <p>Aqui se organizaran las guardias</p>
-        </div>
-        <div *ngSwitchCase="'Notificaciónes'">
-          <h2>Mensajes</h2>
-          <p>Aquí están tus mensajes importantes.</p>
-        </div>
-        <div *ngSwitchCase="'documentos'">
-          <h2>Documentos</h2>
-          <p>Consulta tus documentos aquí.</p>
-        </div>
-        <div *ngSwitchDefault>
-          <h2>Selecciona una opción</h2>
-        </div>
-      </ng-container>
-    </main>
-  </div>
+  <aside class="sidebar">
+    <ul>
+      <li (click)="changeView('Horario')">Horario</li>
+      <li (click)="changeView('Guardias')">Guardias</li>
+      <li (click)="changeView('Notificaciónes')">Notificaciónes</li>
+      <li (click)="changeView('documentos')">Documentos</li>
+    </ul>
+  </aside>
+  <main class="main-content">
+    @switch (currentView) {
+      @case('Horario') {
+        <app-body></app-body>
+      }
+      @case('Guardias') {
+        <p>Aqui se organizaran las guardias</p>
+      }
+      @case('Notificaciónes') {
+        <h2>Mensajes</h2>
+        <p>Aquí están tus mensajes importantes.</p>
+      }
+      @case('documentos') {
+        <h2>Documentos</h2>
+        <p>Consulta tus documentos aquí.</p>
+      }
+      @default {
+        <h2>Selecciona una opción</h2>
+      }
+    }
+  </main>
+</div>
+
   
