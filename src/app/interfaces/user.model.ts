@@ -1,5 +1,5 @@
 export interface User {
-    id_profesor: string;
+    id: string;
     nombre: string;
     apellidos: string;
     curso: string;

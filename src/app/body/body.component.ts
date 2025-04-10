@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class BodyComponent {
   userHorario: any | null = null;
-  id_profesor: any| null = null;
+  id_profesor: any | null = null;
   private destroy$ = new Subject<void>();
 
   constructor(private authService: AuthService) {}
@@ -22,9 +22,8 @@ export class BodyComponent {
       .pipe(takeUntil(this.destroy$))
       .subscribe((userD: User | null) => {
         if (userD) {
-          this.id_profesor = userD.id_profesor;
+          this.id_profesor = userD.id;
           this.userHorario = userD.horario;
-          console.log(this.userHorario);
         }
       });
   }
@@ -34,7 +33,6 @@ export class BodyComponent {
   }
   
   getHoras(dia: string): string[] {
-    console.log(dia);
     return this.userHorario?.[dia] ? Object.keys(this.userHorario[dia]) : [];
   }
 
@@ -53,7 +51,6 @@ export class BodyComponent {
     if (!datos || datos === "libre") {
       return [];
     }
-    console.log(datos);
     return Array.isArray(datos) ? datos : [datos];
   }
   
@@ -66,33 +63,53 @@ export class BodyComponent {
   Editar(): void{
     this.modoEdicion = true;
   }
-onEditarCelda(dia: string, hora: string, valor: string ) {
-  const horasMap: { [key: string]: string } = {
-    "8:30-9:25": "hora1",
-    "9:25-10:20": "hora2",
-    "10:40-11:35": "hora3",
-    "11:35-12:30": "hora4",
-    "12:40-13:35": "hora5",
-    "13:35-14:30": "hora6"
-  };
-
-  const horaKey = horasMap[hora];
-  if (!this.userHorario[dia]) {
-    this.userHorario[dia] = {};
+  onEditarCelda(dia: string, hora: string, campo: 'asignatura' | 'curso' | 'clase', valor: string) {
+    const horasMap: { [key: string]: string } = {
+      "8:30-9:25": "hora1",
+      "9:25-10:20": "hora2",
+      "10:40-11:35": "hora3",
+      "11:35-12:30": "hora4",
+      "12:40-13:35": "hora5",
+      "13:35-14:30": "hora6"
+    };
+  
+    const horaKey = horasMap[hora];
+  
+    if (!this.userHorario) {
+      this.userHorario = {};
+    }
+  
+    if (!this.userHorario[dia]) {
+      this.userHorario[dia] = {};
+    }
+  
+    if (!this.userHorario[dia][horaKey] || this.userHorario[dia][horaKey] === 'libre') {
+      this.userHorario[dia][horaKey] = [{}];
+    }
+  
+    const celda = this.userHorario[dia][horaKey][0];
+  
+    if (valor.trim() === '') {
+      delete celda[campo];
+    } else {
+      celda[campo] = valor;
+    }
+      if (!celda.asignatura && !celda.curso && !celda.clase) {
+      this.userHorario[dia][horaKey] = 'libre';
+    }
   }
 
-  this.userHorario[dia][horaKey] = [{ asignatura: valor }];
-}
-guardarCambios() {
-  if (!this.userHorario) return;
-
-  this.authService.updateDatos(this.id_profesor, undefined, undefined, undefined, undefined, this.userHorario)
-    .then(() => {
-      this.modoEdicion = false;
-      console.log('Cambios guardados correctamente');
-    })
-    .catch((error) => {
-      console.error('Error al guardar los cambios:', error);
-    });
-}
+  guardarCambios() {
+    if (!this.userHorario) return;
+    this.authService.updateDatos(this.id_profesor, undefined, undefined, "2", undefined, undefined)
+      .subscribe({
+        next: () => {
+          this.modoEdicion = false;
+          console.log('Cambios guardados correctamente');
+        },
+        error: (error) => {
+          console.error('Error al guardar los cambios:', error);
+        }
+      });
+  }
 }

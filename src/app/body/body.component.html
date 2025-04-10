@@ -22,11 +22,27 @@
               } @else {
                 @for (dia of getDias(); track dia) {
                   <td>
-                    <input 
+                    @let datos = getDatos(dia, hora)[0] || {};
+                    
+                    <input
                       type="text"
-                      [value]="getDatos(dia, hora)[0]?.asignatura || ''"
-                      (input)="onEditarCelda(dia, hora, $any($event.target).value)"
+                      [value]="datos.asignatura || ''"
+                      (input)="onEditarCelda(dia, hora, 'asignatura', $any($event.target).value)"
                       placeholder="Asignatura"
+                    />
+                    <br />
+                    <input
+                      type="text"
+                      [value]="datos.curso || ''"
+                      (input)="onEditarCelda(dia, hora, 'curso', $any($event.target).value)"
+                      placeholder="Curso"
+                    />
+                    <br />
+                    <input
+                      type="text"
+                      [value]="datos.clase || ''"
+                      (input)="onEditarCelda(dia, hora, 'clase', $any($event.target).value)"
+                      placeholder="Clase"
                     />
                   </td>
                 }

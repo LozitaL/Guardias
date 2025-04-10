@@ -29,9 +29,9 @@ router.post('/datos/:id/ac', async (req: Request, res: Response) => {
         values.push(foto);
     }
     if (horario !== undefined) {
-        fieldsToUpdate.push('horario = ?');
-        values.push(JSON.stringify(horario));  
-    }
+      fieldsToUpdate.push('horario = ?');
+      values.push(horario); 
+  }
 
     if (fieldsToUpdate.length === 0) {
         return res.status(400).json({ error: 'No fields to update' });
