@@ -4,49 +4,52 @@ import db from '../db/db';
 
 const router = express.Router();
 
-router.post('/datos/:id/ac', async (req: Request, res: Response) => {
-    const { id } = req.params;  
-    const { nombre, apellidos, curso, foto, horario } = req.body; 
+router.put('/datos/:id/ac', async (req, res) => {
+  const { id } = req.params;  
+  const { nombre, apellidos, curso, foto, horario } = req.body;
 
-    let updateQuery = 'UPDATE profesores SET ';
-    const values: any[] = [];
-    const fieldsToUpdate: string[] = [];
+  let updateQuery = 'UPDATE profesores SET ';
+  const values = [];
+  const fieldsToUpdate = [];
 
-    if (nombre !== undefined) {
-        fieldsToUpdate.push('nombre = ?');
-        values.push(nombre);
-    }
-    if (apellidos !== undefined) {
-        fieldsToUpdate.push('apellidos = ?');
-        values.push(apellidos);
-    }
-    if (curso !== undefined) {
-        fieldsToUpdate.push('curso = ?');
-        values.push(curso);
-    }
-    if (foto !== undefined) {
-        fieldsToUpdate.push('foto = ?');
-        values.push(foto);
-    }
-    if (horario !== undefined) {
+  if (nombre !== undefined) {
+      fieldsToUpdate.push('nombre = ?');
+      values.push(nombre);
+  }
+  if (apellidos !== undefined) {
+      fieldsToUpdate.push('apellidos = ?');
+      values.push(apellidos);
+  }
+  if (curso !== undefined) {
+      fieldsToUpdate.push('curso = ?');
+      values.push(curso);
+  }
+  if (foto !== undefined) {
+      fieldsToUpdate.push('foto = ?');
+      values.push(foto);
+  }
+  if (horario !== undefined) {
       fieldsToUpdate.push('horario = ?');
-      values.push(horario); 
+      values.push(JSON.stringify(horario)); // Asegúrate de convertir a JSON si es necesario
   }
 
-    if (fieldsToUpdate.length === 0) {
-        return res.status(400).json({ error: 'No fields to update' });
-    }
+  if (fieldsToUpdate.length === 0) {
+      return res.status(400).json({ error: 'No fields to update' });
+  }
 
-    updateQuery += fieldsToUpdate.join(', ') + ' WHERE id = ?';
-    values.push(id);  
+  updateQuery += fieldsToUpdate.join(', ') + ' WHERE id = ?';
+  values.push(id);  
 
-    try {
-        await queryDb(updateQuery, values);
-        return res.status(200).json({ message: 'Datos actualizados correctamente' });  
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Error al actualizar los datos' });  
-    }
+  console.log('Consulta SQL:', updateQuery);
+  console.log('Valores:', values);
+
+  try {
+       await queryDb(updateQuery, values);
+      return res.status(200).json({ message: 'Datos actualizados correctamente' });  
+  } catch (error) {
+      console.error('Error en la actualización:', error);
+      return res.status(500).json({ error: 'Error al actualizar los datos' });  
+  }
 });
 
 

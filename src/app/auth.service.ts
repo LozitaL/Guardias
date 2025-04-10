@@ -3,8 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from './interfaces/user.model';
-import { HttpClient } from '@angular/common/http';
-import { Horario } from '../interfaces/horario.model';
+import { Horario } from './interfaces/Horario.model';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +21,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
 
 
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router, private http: HttpClient) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router,) {
     let storedUser = null;
     let datosUser = null;
   
@@ -82,17 +81,26 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
       return response.json();
   }
 
-  updateDatos(id: number, nombre?: string, apellidos?: string, curso?: string, foto?: string, horario?: Horario): Observable<any> {
-    const updateData: any = {};
-    if (nombre?.trim()) updateData.nombre = nombre;
-    if (apellidos?.trim()) updateData.apellidos = apellidos;
-    if (curso?.trim()) updateData.curso = curso;
-    if (foto?.trim()) updateData.foto = foto;
-    if (horario && typeof horario === 'object') updateData.horario = horario;
-  
-    return this.http.patch(`${this.apiUrldatos}/${id}/ac`, updateData);
-  }
+  async updateHorario(id: number, horario: JSON): Promise<any> {
+    try {
+        const response = await fetch(`${this.apiUrldatos}/${id}/ac`, {
+            method: 'PUT', // Cambiado a PUT
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ horario }), 
+        });
 
+        if (!response.ok) {
+            throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('Error en la actualización de datos:', error);
+        throw error;
+    }
+}
 
 login(username: string, password: string): Promise<any> {
   return fetch(this.apiUrl, {

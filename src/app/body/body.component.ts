@@ -101,15 +101,16 @@ export class BodyComponent {
 
   guardarCambios() {
     if (!this.userHorario) return;
-    this.authService.updateDatos(this.id_profesor, undefined, undefined, "2", undefined, undefined)
-      .subscribe({
-        next: () => {
-          this.modoEdicion = false;
-          console.log('Cambios guardados correctamente');
-        },
-        error: (error) => {
-          console.error('Error al guardar los cambios:', error);
-        }
-      });
-  }
+
+    const idProfesor = parseInt(this.id_profesor);
+
+    this.authService.updateHorario(idProfesor, this.userHorario)
+        .then(response => {
+            console.log('Datos actualizados:', response);
+            this.modoEdicion = false;
+        })
+        .catch(error => {
+            console.error('Error al actualizar datos:', error);
+        });
 }
+  }
