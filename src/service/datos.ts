@@ -40,8 +40,6 @@ router.put('/datos/:id/ac', async (req, res) => {
   updateQuery += fieldsToUpdate.join(', ') + ' WHERE id = ?';
   values.push(id);  
 
-  console.log('Consulta SQL:', updateQuery);
-  console.log('Valores:', values);
 
   try {
        await queryDb(updateQuery, values);

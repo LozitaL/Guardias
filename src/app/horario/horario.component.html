@@ -1,7 +1,4 @@
-<nav>
-<h2>Horario</h2>
-<button (click)="Editar()"></button>
-</nav>
+
 @switch (modoEdicion) {
     @case(true) {
       <table>
@@ -92,6 +89,8 @@
                 }
               </tbody>
             </table>
+            <button (click)="Editar()">editar horario</button>
+
           } @else {
             <p>No hay horario disponible.</p>
           }

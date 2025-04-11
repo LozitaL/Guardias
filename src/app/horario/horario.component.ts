@@ -5,12 +5,12 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 @Component({
-  selector: 'app-body',
+  selector: 'app-horario',
   imports: [CommonModule],
-  templateUrl: './body.component.html',
-  styleUrl: './body.component.css'
+  templateUrl: './horario.component.html',
+  styleUrl: './horario.component.css'
 })
-export class BodyComponent {
+export class HorarioComponent {
   userHorario: any | null = null;
   id_profesor: any | null = null;
   private destroy$ = new Subject<void>();
@@ -83,21 +83,26 @@ export class BodyComponent {
       this.userHorario[dia] = {};
     }
   
-    if (!this.userHorario[dia][horaKey] || this.userHorario[dia][horaKey] === 'libre') {
-      this.userHorario[dia][horaKey] = [{}];
+    if (!this.userHorario[dia][horaKey]) {
+      this.userHorario[dia][horaKey] = [{}]; 
     }
   
     const celda = this.userHorario[dia][horaKey][0];
-  
-    if (valor.trim() === '') {
+
+    if (typeof celda !== 'object' || celda === null) {
+      this.userHorario[dia][horaKey] = [{}];
+    }
+
+    if (valor.trim() == '') {
       delete celda[campo];
     } else {
       celda[campo] = valor;
     }
-      if (!celda.asignatura && !celda.curso && !celda.clase) {
+
+    if (!celda.asignatura && !celda.curso && !celda.clase) {
       this.userHorario[dia][horaKey] = 'libre';
     }
-  }
+}
 
   guardarCambios() {
     if (!this.userHorario) return;
@@ -106,7 +111,6 @@ export class BodyComponent {
 
     this.authService.updateHorario(idProfesor, this.userHorario)
         .then(response => {
-            console.log('Datos actualizados:', response);
             this.modoEdicion = false;
         })
         .catch(error => {

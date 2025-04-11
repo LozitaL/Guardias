@@ -1,7 +1,7 @@
 .componente {
   font-family: "Arial", sans-serif;
-  background: rgb(255, 255, 255);
-  display: block;
+  background: #ffffff;
+  display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
