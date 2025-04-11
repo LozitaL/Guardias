@@ -3,7 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { User } from './interfaces/user.model';
-import { Horario } from './interfaces/Horario.model';
+import { Horario } from './interfaces/horario.model';
 
 @Injectable({
   providedIn: 'root',
