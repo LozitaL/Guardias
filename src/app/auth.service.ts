@@ -19,8 +19,6 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
   private currentDataUser:BehaviorSubject<any>;
   public DataUser: Observable<any>;
 
-
-
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router,) {
     let storedUser = null;
     let datosUser = null;
@@ -84,7 +82,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
   async updateHorario(id: number, horario: JSON): Promise<any> {
     try {
         const response = await fetch(`${this.apiUrldatos}/${id}/ac`, {
-            method: 'PUT', // Cambiado a PUT
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },

@@ -1,16 +1,27 @@
 <header>
-    <div class="logo">
-      <a href="https://educamosclm.castillalamancha.es"><img src="assets/images/educamos.png" alt="Logo EducamosCLM"></a>
+  <div class="logo">
+    <a href="https://educamosclm.castillalamancha.es"
+      ><img src="assets/images/educamos.png" alt="Logo EducamosCLM"
+    /></a>
+  </div>
+  <div class="info">
+    @if(userFoto != ""){
+    <img [src]="userFoto" alt="FotoProfesor" />
+    }@else {
+    <img [src]="defaultFoto" alt="FotoDefecto" />
+    }
+
+    <div class="details">
+      <label for="Centro"><span>Centro</span></label>
+      <label for="Clase"
+        ><span>Clase Correspondiente: {{ userCurso }}</span></label
+      >
+      <label for="nombreprofesor"
+        ><span>Nombre: {{ userName }}</span></label
+      >
     </div>
-    <div class="info">
-      <img *ngIf="userFoto" [src]="userFoto" alt="nombreprofesor">
-      <div class="details">
-        <label for="Centro"><span>Centro</span></label>
-        <label for="Clase"><span>Clase Correspondiente: {{ userCurso }}</span></label>
-        <label for="nombreprofesor"><span>Nombre: {{userName}}</span></label>
-      </div>
-      <div class="sesion">
-        <button alt="Cerrar Sesion" (click)="onLogout()">Cerrar Sesion</button>
-      </div>
+    <div class="sesion">
+      <button alt="Cerrar Sesion" (click)="onLogout()">Cerrar Sesion</button>
     </div>
-  </header>
+  </div>
+</header>

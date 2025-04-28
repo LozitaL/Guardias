@@ -16,6 +16,7 @@ export class HeaderComponent {
   userFoto: string | null = null;
   userCurso: string | null = null;
   userHorario: JSON | null = null;
+  defaultFoto: string = "/assets/imgprofesor/profiledefault.png";
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {

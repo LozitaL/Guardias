@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Horario</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f7f7;
+      padding: 2rem;
+    }
+
+    .horario {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 800px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .horario th,
+    .horario td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .horario th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .horario td:first-child {
+      background-color: #e9f5e9;
+      font-weight: bold;
+    }
+
+    .horario tr:nth-child(even):not(:first-child) {
+      background-color: #f9f9f9;
+    }
+
+    .horario tr:hover {
+      background-color: #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+
+  <table class="horario">
+    <tr>
+      <th>Hora</th>
+      <th>Lunes</th>
+      <th>Martes</th>
+      <th>Miércoles</th>
+      <th>Jueves</th>
+      <th>Viernes</th>
+    </tr>
+    <tr>
+      <td>08:00 - 09:00</td>
+      <td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+        <td>09:00 - 10:00</td>
+        <td></td>
+        <td></td>
+        <td rowspan="2" style="background: lightcoral;">Matemáticas</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>10:00 - 11:00</td>
+        <td></td>
+        <td></td>
+        <!-- Aquí NO se pone celda para miércoles, porque rowspan="2" ya ocupa esta fila -->
+        <td></td>
+        <td></td>
+      </tr>
+    <tr>
+      <td>11:30 - 12:30</td>
+      <td></td><td></td><td></td><td></td><td></td>
+    </tr>
+    <tr>
+      <td>12:30 - 13:30</td>
+      <td></td

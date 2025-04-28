@@ -1,99 +1,164 @@
-
-@switch (modoEdicion) {
-    @case(true) {
-      <table>
-        <thead>
-          <tr>
-            <th>Hora</th>
-            @for (dia of getDias(); track dia) {
-              <th>{{ dia }}</th>
-            }
-          </tr>
-        </thead>
-        <tbody>
-          @for (hora of ['8:30-9:25', '9:25-10:20', '10:40-11:35', '11:35-12:30', '12:40-13:35', '13:35-14:30']; track hora) {
-            <tr>
-              <td>{{ hora }}</td>
-              @if (hora === '10:20-10:40' || hora === '12:30-12:40') {
-                <td colspan="5" class="recreo">Recreo</td>
-              } @else {
-                @for (dia of getDias(); track dia) {
-                  <td>
-                    @let datos = getDatos(dia, hora)[0] || {};
-                    
-                    <input
-                      type="text"
-                      [value]="datos.asignatura || ''"
-                      (input)="onEditarCelda(dia, hora, 'asignatura', $any($event.target).value)"
-                      placeholder="Asignatura"
-                    />
-                    <br />
-                    <input
-                      type="text"
-                      [value]="datos.curso || ''"
-                      (input)="onEditarCelda(dia, hora, 'curso', $any($event.target).value)"
-                      placeholder="Curso"
-                    />
-                    <br />
-                    <input
-                      type="text"
-                      [value]="datos.clase || ''"
-                      (input)="onEditarCelda(dia, hora, 'clase', $any($event.target).value)"
-                      placeholder="Clase"
-                    />
-                  </td>
-                }
-              }
-            </tr>
-          }
-        </tbody>
-      </table>
-      <button (click)="guardarCambios()">Guardar cambios</button>
+@let dias = ["Lunes","Martes","Miércoles","Jueves","Viernes"]; @let horas =
+["8:30-9:25","9:25-10:20","10:40-11:35","11:35-12:30","12:40-13:35","13:35-14:30"];
+@switch (modoEdicion) { @case(true) {
+<table>
+  <thead>
+    <tr>
+      <th>Hora</th>
+      @for (dia of dias; track dia) {
+      <th>{{ dia }}</th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (hora of horas; track hora; let idx = $index) { @if (hora ==
+    "10:40-11:35") {
+    <tr>
+      <td>10:20-10:40</td>
+      <td colspan="5">Recreo</td>
+    </tr>
+    } @if (hora == "12:40-13:35") {
+    <tr>
+      <td>12:30-12:40</td>
+      <td colspan="5">Recreo</td>
+    </tr>
     }
-    @default {
-        @if (userHorario) {
-            <table>
-              <thead>
-                <tr>
-                  <th>Hora</th>
-                  @for (dia of ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; track dia) {
-                    <th>{{ dia }}</th>
-                  }
-                </tr>
-              </thead>
-              <tbody>
-                @for (hora of ['8:30-9:25', '9:25-10:20', '10:40-11:35', '11:35-12:30', '12:40-13:35', '13:35-14:30']; track hora) {
-                  <tr>
-                    <td>{{ hora }}</td>
-          
-                    @if (hora === '10:20-10:40' || hora === '12:30-12:40') {
-                      <td colspan="5" class="recreo">Recreo</td>
-                    } @else {
-                      @for (dia of ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes']; track dia) {
-                        <td>
-                          @let datos = getDatos(dia, hora);
-                          @if (datos) {
-                               @if (datos.length > 0) {
-                                   @for (dato of datos; track $index) {
-                                      <div>{{ dato?.asignatura || '' }}</div>
-                              <small>{{ dato?.curso || '' }} {{ dato?.clase || '' }}</small>
-                          }
-                               } @else {
-                                   <small>Libre</small>
-            }
-          }
-                        </td>
-                      }
-                    }
-                  </tr>
-                }
-              </tbody>
-            </table>
-            <button (click)="Editar()">editar horario</button>
 
+    <tr>
+      <td>{{ hora }}</td>
+
+      @for (dia of dias; track dia) { @let dato = getDatos(dia); @if (dato[idx]
+      != null && dato[idx] !== 'libre') {
+      <td>
+        <input
+          type="text"
+          [value]="dato[idx]?.asignatura || ''"
+          (input)="
+            onEditarCelda(dia, 'asignatura', $any($event.target).value, idx)
+          "
+          placeholder="Asignatura"
+        /><br />
+        <input
+          type="text"
+          [value]="dato[idx]?.curso || ''"
+          (input)="onEditarCelda(dia, 'curso', $any($event.target).value, idx)"
+          placeholder="Curso"
+        /><br />
+        <input
+          type="text"
+          [value]="dato[idx]?.clase || ''"
+          (input)="onEditarCelda(dia, 'clase', $any($event.target).value, idx)"
+          placeholder="Clase"
+        />
+        @if (hora == "10:40-11:35" || hora == "11:35-12:30") {
+        <label>Seleccionar hora:</label>
+        <select
+          [value]="dato[idx]?.hora || hora"
+          (change)="onEditarCelda(dia, 'hora', $any($event.target).value, idx)"
+        >
+          @if (hora == "10:40-11:35") {
+          <option value="10:20-11:15">10:20-11:15</option>
+          <option value="10:40-11:35">10:40-11:35</option>
           } @else {
-            <p>No hay horario disponible.</p>
+          <option value="11:35-12:30">11:35-12:30</option>
+          <option value="11:45-12:40">11:45-12:40</option>
           }
-          
+        </select>
+        }
+      </td>
+
+      } @else {
+      <td>
+        <input
+          type="text"
+          [value]="''"
+          (input)="
+            onEditarCelda(dia, 'asignatura', $any($event.target).value, idx)
+          "
+          placeholder="Asignatura"
+        /><br />
+        <input
+          type="text"
+          [value]="''"
+          (input)="onEditarCelda(dia, 'curso', $any($event.target).value, idx)"
+          placeholder="Curso"
+        /><br />
+        <input
+          type="text"
+          [value]="''"
+          (input)="onEditarCelda(dia, 'clase', $any($event.target).value, idx)"
+          placeholder="Clase"
+        />
+        @if (hora == "10:40-11:35" || hora == "11:35-12:30") {
+        <label>Seleccionar hora:</label>
+        <select
+          [value]="dato[idx]?.hora || hora"
+          (change)="onEditarCelda(dia, 'hora', $any($event.target).value, idx)"
+        >
+          <option value="10:20-11:15">10:20-11:15</option>
+          <option value="10:40-11:35">10:40-11:35</option>
+          <option value="11:35-12:30">11:35-12:30</option>
+          <option value="11:45-12:40">11:45-12:40</option>
+        </select>
+        }
+      </td>
+      } }
+    </tr>
     }
-  }
+  </tbody>
+</table>
+
+<button (click)="guardarCambios()">Guardar cambios</button>
+} @default { @if (userHorario) {
+
+<table>
+  <thead>
+    <tr>
+      <th>Hora</th>
+
+      @for (dia of dias; track dia) {
+      <th>{{ dia }}</th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (hora of horas; track hora; let idx = $index) { @if (hora ==
+    "10:40-11:35") {
+    <tr>
+      <td>10:20-10:40</td>
+      <td colspan="5">recreo</td>
+    </tr>
+    } @if (hora == "12:40-13:35") {
+    <tr>
+      <td>12:30-12:40</td>
+    </tr>
+    }
+    <tr>
+      <td>{{ hora }}</td>
+      @for (dia of dias ; track dia;) { @let dato = getDatos(dia); @if
+      (dato[idx] != null) { @if (dato[idx].asignatura == "" ||
+      dato[idx].asignatura == "libre") {
+      <td>Hora libre</td>
+      }@else{ @if (dato[idx].hora == "10:40-11:35") {
+      <td>
+        <div>{{ dato[idx].asignatura }}</div>
+        <div>{{ dato[idx].curso }}</div>
+        <div>{{ dato[idx].clase }}</div>
+        <div>{{ dato[idx].hora }}</div>
+      </td>
+      }@else {
+      <td>
+        <div>{{ dato[idx].asignatura }}</div>
+        <div>{{ dato[idx].curso }}</div>
+        <div>{{ dato[idx].clase }}</div>
+      </td>
+      } } }}
+    </tr>
+    }
+  </tbody>
+</table>
+<button (click)="Editar()">editar horario</button>
+
+} @else {
+<p>No hay horario disponible.</p>
+} } }

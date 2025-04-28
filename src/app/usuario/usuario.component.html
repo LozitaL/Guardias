@@ -1,9 +1,10 @@
 
 <div [class.contenido-cargando]="!dataLoaded" [class.contenido-visible]="dataLoaded">
-  <app-header *ngIf="dataLoaded"></app-header>
-<app-modal *ngIf="dataLoaded"></app-modal>
+  @if(dataLoaded){
+    <app-header></app-header>
+    <app-modal></app-modal>
+  }
 </div>
-  
   <ng-template #cargando>
     <p>Cargando...</p>
   </ng-template>
