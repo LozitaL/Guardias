@@ -19,6 +19,8 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
   private currentDataUser:BehaviorSubject<any>;
   public DataUser: Observable<any>;
 
+  private apiUrlHorarios = 'http://localhost:4000/api/notis'
+  
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router,) {
     let storedUser = null;
     let datosUser = null;
@@ -38,7 +40,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
     this.DataUser = this.currentDataUser.asObservable();
   }
   
-
+  
   
   datos(id: string): Promise<any> {
     return fetch(`${this.apiUrldatos}/${id}`, {

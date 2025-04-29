@@ -3,10 +3,9 @@ import { AuthService } from '../auth.service';
 import { User } from '../interfaces/user.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-horario',
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './horario.component.html',
   styleUrl: './horario.component.css'
 })
@@ -47,7 +46,9 @@ export class HorarioComponent {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
   modoEdicion: boolean = false;
+  
   Editar(): void{
     this.modoEdicion = true;
   }

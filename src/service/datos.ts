@@ -3,7 +3,7 @@ import db from '../db/db';
 
 
 const router = express.Router();
-
+//actualizas datos de prrofesores
 router.put('/datos/:id/ac', async (req, res) => {
   const { id } = req.params;  
   const { nombre, apellidos, curso, foto, horario } = req.body;
@@ -30,7 +30,7 @@ router.put('/datos/:id/ac', async (req, res) => {
   }
   if (horario !== undefined) {
       fieldsToUpdate.push('horario = ?');
-      values.push(JSON.stringify(horario)); // Asegúrate de convertir a JSON si es necesario
+      values.push(JSON.stringify(horario)); 
   }
 
   if (fieldsToUpdate.length === 0) {
@@ -50,7 +50,7 @@ router.put('/datos/:id/ac', async (req, res) => {
   }
 });
 
-
+//profesores/datos:id obtienes datos de profesores
 router.get('/datos/:id', async (req: Request, res: Response) => {
   const {id} = req.params;
 
@@ -77,7 +77,7 @@ router.get('/datos/:id', async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Error interno del servidor' }); 
   }
 });
-
+//profesores/datos
 router.post('/datos', async (req: Request, res: Response) => {
     const { nombre, apellidos, curso, foto, horario } = req.body;
   
@@ -94,6 +94,21 @@ router.post('/datos', async (req: Request, res: Response) => {
     }
   });
 
+//horarios/notis
+
+  router.post('/noti'),async(req: Request, res: Response) => {
+    const {id_horario, id_profesor, horario} = req.body;
+    try{
+      const result = await queryDb(
+      'INSERT INTO profesores (id_horario, id_profesor, horario) VALUES (?,?,?,)',
+      [id_horario, id_profesor, horario]);
+      return res.status(201).json({ message: 'Profesor insertado correctamente', id: result });
+    }
+    catch(err){
+      console.error('Error en el servidor: ', err);
+      return res.status(500).json({ message: 'Error interno del servidor'})
+    }
+  }
 
   
 const queryDb = (query: string, values: any[]) => {
