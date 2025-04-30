@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import db from '../db/db';
 
 const router = express.Router();
+
 //actualizas datos de prrofesores
 router.put('/datos/:id/ac', async (req, res) => {
   const { id } = req.params;
@@ -77,6 +78,7 @@ router.get('/datos/:id', async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Error interno del servidor' });
   }
 });
+
 //profesores/datos
 router.post('/datos', async (req: Request, res: Response) => {
   const { nombre, apellidos, curso, foto, horario } = req.body;
@@ -97,7 +99,6 @@ router.post('/datos', async (req: Request, res: Response) => {
 });
 
 //horarios/notis
-
 router.post('/noti'),
   async (req: Request, res: Response) => {
     const { id_horario, id_profesor, horario } = req.body;
