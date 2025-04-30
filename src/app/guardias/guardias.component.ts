@@ -54,6 +54,6 @@ export class GuardiasComponent {
       dia: dia
     };
   
-    this.guardarFalta(registro); //para mañana , añadir que se envie el registro y si ha obtenido registro de la tabla horario, id_profesor = a x tiempo "esta semana" se muestre el cambio guardado en la tabla horario
+   // this.guardarFalta(registro); //para mañana , añadir que se envie el registro y si ha obtenido registro de la tabla horario, id_profesor = a x tiempo "esta semana" se muestre el cambio guardado en la tabla horario
   }
 }

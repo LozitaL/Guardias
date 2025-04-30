@@ -24,7 +24,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router,) {
     let storedUser = null;
     let datosUser = null;
-  
+  //datos guardados
     if (isPlatformBrowser(this.platformId)) {
       storedUser = localStorage.getItem('currentUser');
       datosUser = localStorage.getItem('DataUser');
@@ -41,7 +41,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
   }
   
   
-  
+  //datos de profesor
   datos(id: string): Promise<any> {
     return fetch(`${this.apiUrldatos}/${id}`, {
       method: 'GET',
