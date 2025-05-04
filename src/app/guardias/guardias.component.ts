@@ -17,7 +17,8 @@ export class GuardiasComponent {
   horas: any | null = null;
   private destroy$ = new Subject<void>();
   constructor(private authService: AuthService) {}
-
+  desplegable = false;
+  registro: any | null = null;
   getDatos(dia: string): any[] {
     
         const datos = this.userHorario[dia];
@@ -44,6 +45,7 @@ export class GuardiasComponent {
   }
 
   onClickCelda(celda: any, dia: string, idx: number): void {
+    
     const registro = {
       hora: celda.hora || this.horas[idx],
       curso: celda.curso,
@@ -53,7 +55,14 @@ export class GuardiasComponent {
       profesor: this.id_profesor,
       dia: dia
     };
+  this.registro = registro; 
+  this.desplegable = true; 
+  }
   
-   // this.guardarFalta(registro); //para mañana , añadir que se envie el registro y si ha obtenido registro de la tabla horario, id_profesor = a x tiempo "esta semana" se muestre el cambio guardado en la tabla horario
+  confirmarRegistro(descrip: string){
+    this.registro.comentario += descrip;
+    this.authService;
+    this.registro = null;
+    this.desplegable = false;
   }
 }
