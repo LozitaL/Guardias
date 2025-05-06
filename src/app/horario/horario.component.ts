@@ -35,6 +35,11 @@ export class HorarioComponent {
     /*{"Lunes":
 	  [{"clase":"Matemáticas","curso":"2","asignatura":"algo","hora":"8:30-9:25"},*/
         const datos = this.userHorario[dia];
+    for (let index = 0; index < 5; index++) {
+      if(typeof datos[index] !== 'object' || datos[index] === null ){
+       datos[index] = {"hora":"","clase":"","curso":"","asignatura":""};
+      }
+    }
     if (!datos || datos === "") {
       return [];
     }
@@ -64,9 +69,9 @@ export class HorarioComponent {
     if (!this.userHorario[dia][idx]) {
       this.userHorario[dia][idx] = {};
     }
-  
+   
+
     const celda = this.userHorario[dia][idx];
-  
     if (valor.trim() === '') {
       delete celda[campo];
     } else {
@@ -74,9 +79,11 @@ export class HorarioComponent {
     }
   
     if (!celda.asignatura && !celda.curso && !celda.clase) {
-      this.userHorario[dia][idx] = 'libre';
+      this.userHorario[dia][idx] = {"hora":"","clase":"","curso":"","asignatura":""};
     }
-    //console.log(this.userHorario); 
+    if (typeof this.userHorario[dia][idx] !== 'object' || this.userHorario[dia][idx] === null) {
+      this.userHorario[dia][idx] = {"hora":"","clase":"","curso":"","asignatura":""};
+    }
   }
   
 

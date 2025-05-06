@@ -27,8 +27,8 @@
     <tr>
       <td>{{ hora }}</td>
 
-      @for (dia of dias; track dia) { @let dato = getDatos(dia); @if (dato[idx]
-      != null && dato[idx] !== 'libre') {
+      @for (dia of dias; track dia) { @let dato = getDatos(dia); @if(dato[idx]!=
+      null) {
       <td>
         <input
           type="text"
@@ -95,10 +95,13 @@
           [value]="dato[idx]?.hora || hora"
           (change)="onEditarCelda(dia, 'hora', $any($event.target).value, idx)"
         >
+          @if (hora == "10:40-11:35") {
           <option value="10:20-11:15">10:20-11:15</option>
           <option value="10:40-11:35">10:40-11:35</option>
+          } @else {
           <option value="11:35-12:30">11:35-12:30</option>
           <option value="11:45-12:40">11:45-12:40</option>
+          }
         </select>
         }
       </td>
@@ -131,6 +134,7 @@
     } @if (hora == "12:40-13:35") {
     <tr>
       <td>12:30-12:40</td>
+      <td colspan="5">recreo</td>
     </tr>
     }
     <tr>
@@ -139,7 +143,8 @@
       (dato[idx] != null) { @if (dato[idx].asignatura == "" ||
       dato[idx].asignatura == "libre") {
       <td>Hora libre</td>
-      }@else{ @if (dato[idx].hora == "10:40-11:35") {
+      }@else{ @if (dato[idx].hora == "10:20-11:15" || dato[idx].hora ==
+      "11:45-12:40") {
       <td>
         <div>{{ dato[idx].asignatura }}</div>
         <div>{{ dato[idx].curso }}</div>
@@ -162,3 +167,4 @@
 } @else {
 <p>No hay horario disponible.</p>
 } } }
+<!--Cambiar o añadir el editar como atributo de celda para crear un objeto y añadirlo a varias celda-->

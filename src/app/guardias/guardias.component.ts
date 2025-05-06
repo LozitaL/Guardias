@@ -19,8 +19,9 @@ export class GuardiasComponent {
   constructor(private authService: AuthService) {}
   desplegable = false;
   registro: any | null = null;
+  descripciones: string | null = null;
   getDatos(dia: string): any[] {
-    
+
         const datos = this.userHorario[dia];
     if (!datos || datos === "") {
       return [];
@@ -50,19 +51,25 @@ export class GuardiasComponent {
       hora: celda.hora || this.horas[idx],
       curso: celda.curso,
       asignatura: celda.asignatura,
-      comentario: "falta: ", 
-      fecha: new Date().toISOString(),
+      comentario: "Motivo: ", 
       profesor: this.id_profesor,
       dia: dia
     };
   this.registro = registro; 
   this.desplegable = true; 
   }
+  cerrarmodal(){
+    this.desplegable = false;
+  }
+  descripcion(descrip: string){
+    this.descripciones = descrip;
+  }
   
-  confirmarRegistro(descrip: string){
-    this.registro.comentario += descrip;
-    this.authService;
+  confirmarRegistro(){
+    this.registro.comentario += this.descripciones;
+    this.authService.insertGuardias(this.id_profesor,this.registro);
     this.registro = null;
     this.desplegable = false;
   }
+
 }

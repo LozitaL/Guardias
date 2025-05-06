@@ -19,7 +19,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
   private currentDataUser:BehaviorSubject<any>;
   public DataUser: Observable<any>;
 
-  private apiUrlHorarios = 'http://localhost:4000/api/notis'
+  private apiUrlGuardias = 'http://localhost:4000/api/notis'
   
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router,) {
     let storedUser = null;
@@ -40,7 +40,8 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
     this.DataUser = this.currentDataUser.asObservable();
   }
   
-  
+
+
   //datos de profesor
   datos(id: string): Promise<any> {
     return fetch(`${this.apiUrldatos}/${id}`, {
@@ -65,7 +66,6 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
       });
   }
 
-  
   async inrtDatos(nombre: string, apellidos: string, curso: string, foto: string, horario?: Horario){
      
       const response = await fetch(`${this.apiUrldatos}`, {
@@ -101,7 +101,24 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
         throw error;
     }
 }
+//datos de guardias
+async insertGuardias(id_profesor: number, horario: JSON) {
+  const response = await fetch(`${this.apiUrlGuardias}/guardias`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id_profesor, horario }),
+  });
 
+  if (!response.ok) {
+    const errorText = await response.text(); 
+    throw new Error(`Error en la solicitud: ${response.statusText} - ${errorText}`);
+  }
+
+  return response.json();
+}
+
+
+//Opciones de usuario
 login(username: string, password: string): Promise<any> {
   return fetch(this.apiUrl, {
     method: 'POST',
@@ -141,7 +158,7 @@ login(username: string, password: string): Promise<any> {
     this.currentUserSubject.next(null);
     this.router.navigate(['']);
   }
-
+  //Datos de sesion
   getCurrentUser(): any {
     return this.currentUserSubject.value;
   }

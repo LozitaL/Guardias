@@ -99,23 +99,24 @@ router.post('/datos', async (req: Request, res: Response) => {
 });
 
 //horarios/notis
-router.post('/noti'),
-  async (req: Request, res: Response) => {
-    const { id_horario, id_profesor, horario } = req.body;
-    try {
-      const result = await queryDb(
-        'INSERT INTO profesores (id_horario, id_profesor, horario) VALUES (?,?,?)',
-        [id_horario, id_profesor, horario]
-      );
-      return res
-        .status(201)
-        .json({ message: 'Profesor insertado correctamente', id: result });
-    } catch (err) {
-      console.error('Error en el servidor: ', err);
-      return res.status(500).json({ message: 'Error interno del servidor' });
-    }
-  };
-router.post('/noti/up'),
+router.post('/notis/guardias', async (req: Request, res: Response) => {
+  const { id_profesor, horario } = req.body;
+  if (!id_profesor || !horario) {
+    return res.status(400).json({ message: 'Faltan parámetros necesarios' });
+  }
+  try {
+    const result = await queryDb(
+      'INSERT INTO guardias (id_profesor, horario) VALUES (?, ?)',
+      [id_profesor, JSON.stringify(horario)] 
+    );
+    return res.status(201).json({ message: 'Profesor insertado correctamente' });
+  } catch (err) {
+    console.error('Error en el servidor: ', err);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
+router.post('/notis/up'),
   async (res: Response) => {
     try {
       const results = await queryDb('SELECT * FROM guardias', [   
