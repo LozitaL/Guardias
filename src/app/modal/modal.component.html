@@ -1,10 +1,9 @@
 <div class="content">
   <aside class="sidebar">
     <ul>
-      <li (click)="changeView('Horario')">Horario personal</li>
+      <li (click)="changeView('Horario')">Horario</li>
       <li (click)="changeView('Guardias')">Guardias semanales</li>
       <li (click)="changeView('Ausencias')">Ausencias</li>
-      <li (click)="changeView('Notificaciónes')">Notificaciónes</li>
       <li (click)="changeView('Documentos')">Documentos</li>
     </ul>
   </aside>
@@ -15,7 +14,7 @@
     <app-guardias></app-guardias>
     } @case ('Ausencias') {
     <app-ausencias></app-ausencias>
-    } @case('Notificaciónes') { } @case('Documentos') {
+    } @case('Documentos') {
     <h2>Documentos</h2>
     <p>Consulta tus documentos aquí.</p>
     } @default {

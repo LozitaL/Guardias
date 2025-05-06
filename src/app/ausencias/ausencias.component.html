@@ -1,1 +1,67 @@
+@let dias = ["Lunes","Martes","Miércoles","Jueves","Viernes"]; @let horas
+=["8:30-9:25","9:25-10:20","10:40-11:35","11:35-12:30","12:40-13:35","13:35-14:30"];
+<table>
+  <thead>
+    <tr>
+      <th>Hora</th>
+      @for (dia of dias; track dia) {
+      <th>{{ dia }}</th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @for (hora of horas; track hora; let idx = $index) { @if (hora ==
+    "10:40-11:35") {
+    <tr>
+      <td>10:20-10:40</td>
+      <td colspan="5">recreo</td>
+    </tr>
+    } @if (hora == "12:40-13:35") {
+    <tr>
+      <td>12:30-12:40</td>
+      <td colspan="5">recreo</td>
+    </tr>
+    }
+    <tr>
+      <td>{{ hora }}</td>
+      @for (dia of dias ; track dia;) { @let dato = getDatos(dia); @if
+      (dato[idx] != null) { @if (dato[idx].asignatura == "" ||
+      dato[idx].asignatura == "") {
+      <td (click)="onClickCelda(dato[idx], dia, idx)" style="cursor: pointer">
+        Hora libre
+      </td>
+      }@else{ @if (dato[idx].hora == "10:40-11:35") {
+      <td (click)="onClickCelda(dato[idx], dia, idx)" style="cursor: pointer">
+        <div>{{ dato[idx].asignatura }}</div>
+        <div>{{ dato[idx].curso }}</div>
+        <div>{{ dato[idx].clase }}</div>
+        <div>{{ dato[idx].hora }}</div>
+      </td>
+      }@else {
+      <td (click)="onClickCelda(dato[idx], dia, idx)" style="cursor: pointer">
+        <div>{{ dato[idx].asignatura }}</div>
+        <div>{{ dato[idx].curso }}</div>
+        <div>{{ dato[idx].clase }}</div>
+      </td>
+      }}}}
+    </tr>
+    }
+  </tbody>
+</table>
+@if (desplegable) {
+<div class="modal-overlay" (click)="cerrarmodal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div>{{ registro.hora }}</div>
+    <div>{{ registro.asignatura }}</div>
 
+    <input
+      type="text"
+      [value]=""
+      (input)="descripcion($any($event.target).value)"
+      placeholder="Motivo Ausencia"
+    />
+    <br />
+    <button (click)="confirmarRegistro()">Enviar</button>
+  </div>
+</div>
+}
