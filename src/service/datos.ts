@@ -51,6 +51,28 @@ router.put('/datos/:id/ac', async (req, res) => {
   }
 });
 
+router.get('/datos/horarios', async (req: Request, res: Response) => {
+  try {
+    const results = await queryDb('SELECT id, nombre, apellidos, horario FROM profesores', []);
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron horarios' });
+    }
+
+    const horarios = results.map((row) => ({
+      id: row.id,
+      nombre: row.nombre,
+      apellidos: row.apellidos,
+      horario: typeof row.horario === 'string' ? JSON.parse(row.horario) : row.horario, // Parsear solo si es una cadena
+    }));
+
+    return res.status(200).json(horarios);
+  } catch (err) {
+    console.error('Error al obtener los horarios:', err);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
 //profesores/datos:id obtienes datos de profesores
 router.get('/datos/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
@@ -78,6 +100,7 @@ router.get('/datos/:id', async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Error interno del servidor' });
   }
 });
+
 
 //profesores/datos
 router.post('/datos', async (req: Request, res: Response) => {

@@ -18,15 +18,17 @@ export class HorarioComponent {
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
+
     this.authService.getCurrentDataUser()
       .pipe(takeUntil(this.destroy$))
       .subscribe((userD: User | null) => {
         if (userD) {
           this.id_profesor = userD.id;
-          this.userHorario = userD.horario;
-          this.nombre = userD.nombre+" "+userD.apellidos;
+          this.userHorario = userD.horario;     
         }
       });
+      console.log(this.authService.comprobarGuardias(this.id_profesor));
+
   }
 
   /*getDias(): string[] {
@@ -56,42 +58,11 @@ export class HorarioComponent {
 
   modoEdicion: boolean = false;
   addGuardia: boolean = false;
-  EditGuardia(): void {
-    this.addGuardia = true;
-  }
+  
   Editar(): void{
     this.modoEdicion = true;
   }
-  onAgregarGuardia(dia: string, campo:'profes', valor: string, idx: number){
-    if (!this.userHorario) {
-      this.userHorario = {};
-    }
-  
-    if (!this.userHorario[dia]) {
-      this.userHorario[dia] = [];
-    }
-  
-    if (!this.userHorario[dia][idx]) {
-      this.userHorario[dia][idx] = {};
-    }
-   
 
-    const celda = this.userHorario[dia][idx];
-    if (valor.trim() === '') {
-      delete celda[campo];
-    } else {
-      celda[campo] = valor;
-    }
-
-
-    if (!celda.asignatura && !celda.curso && !celda.clase) {
-      this.userHorario[dia][idx] = {"hora":"","profes":""};
-    }
-    if (typeof this.userHorario[dia][idx] !== 'object' || this.userHorario[dia][idx] === null) {
-      this.userHorario[dia][idx] = {"hora":"","profes":""};
-    }
-
-  }
   onEditarCelda(dia: string, campo: 'asignatura' | 'curso' | 'clase' | 'hora', valor: string, idx: number) {
     if (!this.userHorario) {
       this.userHorario = {};
@@ -112,7 +83,10 @@ export class HorarioComponent {
     } else {
       celda[campo] = valor;
     }
-  
+     
+    if (campo === 'asignatura' && (valor.toLowerCase() === 'guardia')) {
+      celda['clase'] = this.nombre;
+    }
     if (!celda.asignatura && !celda.curso && !celda.clase) {
       this.userHorario[dia][idx] = {"hora":"","clase":"","curso":"","asignatura":""};
     }
