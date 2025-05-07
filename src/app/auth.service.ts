@@ -101,16 +101,19 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
         throw error;
     }
 }
-//datos de guardias
-async insertGuardias(id_profesor: number, horario: JSON) {
+async insertGuardias(id_profesor: number, horario: JSON, fileData: File): Promise<any> {
+  const formData = new FormData();
+  formData.append('id_profesor', id_profesor.toString());
+  formData.append('horario', JSON.stringify(horario));
+  formData.append('file', fileData); 
+
   const response = await fetch(`${this.apiUrlGuardias}/guardias`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id_profesor, horario }),
+    body: formData,
   });
 
   if (!response.ok) {
-    const errorText = await response.text(); 
+    const errorText = await response.text();
     throw new Error(`Error en la solicitud: ${response.statusText} - ${errorText}`);
   }
 

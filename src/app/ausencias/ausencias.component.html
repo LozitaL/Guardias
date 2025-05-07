@@ -1,67 +1,130 @@
-@let dias = ["Lunes","Martes","Miércoles","Jueves","Viernes"]; @let horas
-=["8:30-9:25","9:25-10:20","10:40-11:35","11:35-12:30","12:40-13:35","13:35-14:30"];
+<select
+  name="tipo"
+  id="tipo"
+  (change)="cambiar($any($event.target).value)"
+  [value]="0"
+>
+  <option value="3">Día</option>
+  <option value="1">Mes</option>
+  <option value="0">Semana</option>
+  <option value="2">Año</option>
+</select>
+
+@switch (tipo) { @case (0) {
 <table>
   <thead>
     <tr>
       <th>Hora</th>
-      @for (dia of dias; track dia) {
-      <th>{{ dia }}</th>
+      @for (fecha of fechasSemana; track fecha) {
+      <th>{{ formatoDia(fecha) }}</th>
       }
     </tr>
   </thead>
   <tbody>
-    @for (hora of horas; track hora; let idx = $index) { @if (hora ==
-    "10:40-11:35") {
-    <tr>
-      <td>10:20-10:40</td>
-      <td colspan="5">recreo</td>
-    </tr>
-    } @if (hora == "12:40-13:35") {
-    <tr>
-      <td>12:30-12:40</td>
-      <td colspan="5">recreo</td>
-    </tr>
-    }
+    @for (hora of horas; track hora ; let idx = $index) {
     <tr>
       <td>{{ hora }}</td>
-      @for (dia of dias ; track dia;) { @let dato = getDatos(dia); @if
-      (dato[idx] != null) { @if (dato[idx].asignatura == "" ||
-      dato[idx].asignatura == "") {
-      <td (click)="onClickCelda(dato[idx], dia, idx)" style="cursor: pointer">
-        Hora libre
-      </td>
-      }@else{ @if (dato[idx].hora == "10:40-11:35") {
-      <td (click)="onClickCelda(dato[idx], dia, idx)" style="cursor: pointer">
-        <div>{{ dato[idx].asignatura }}</div>
-        <div>{{ dato[idx].curso }}</div>
-        <div>{{ dato[idx].clase }}</div>
-        <div>{{ dato[idx].hora }}</div>
+      @for (fecha of fechasSemana; track fecha) { @let dato =
+      setCelda(formatoDia(fecha), idx); @let fechas = formatoDiaMA(fecha);
+      @if(dato.asignatura != "" || dato.clase != ""){
+      <td>
+        {{ dato.asignatura }}
+        {{ dato.clase }}
+        {{ dato.curso }}
+        @if (dato.asignatura != "" || dato.clase != ""){
+        <form [formGroup]="form">
+          <input
+            type="checkbox"
+            (change)="setDatosSel(dato, fechas)"
+            formControlName="check"
+          />
+        </form>
+        }
       </td>
       }@else {
-      <td (click)="onClickCelda(dato[idx], dia, idx)" style="cursor: pointer">
-        <div>{{ dato[idx].asignatura }}</div>
-        <div>{{ dato[idx].curso }}</div>
-        <div>{{ dato[idx].clase }}</div>
-      </td>
-      }}}}
+      <td>Hora Libre</td>
+      } }
     </tr>
     }
   </tbody>
 </table>
-@if (desplegable) {
-<div class="modal-overlay" (click)="cerrarmodal()">
+@if (modalAbierto2) {
+<div class="modal-overlay" (click)="cerrarmodal2()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <div>{{ registro.hora }}</div>
-    <div>{{ registro.asignatura }}</div>
+    <form [formGroup]="form" (submit)="enviarDatosSel()">
+      <p>Esto es solo para separar de la tabla</p>
+      <input
+        type="file"
+        (change)="onFileSelected($event)"
+        accept="application/pdf"
+      />
+      <button type="submit">Confirmar</button>
+    </form>
+  </div>
+</div>
+}
+<button (click)="prepararModal2()">Ausencias</button>
 
-    <input
-      type="text"
-      [value]=""
-      (input)="descripcion($any($event.target).value)"
-      placeholder="Motivo Ausencia"
-    />
-    <br />
-    <button (click)="confirmarRegistro()">Enviar</button>
+} @case (1) {
+<h2>{{ nombreMes(mesActual) }}</h2>
+<div class="grid grid-cols-7 text-xs">
+  @for (dia of diasDelMes(mesActual); track dia) {
+  <div
+    (click)="abrirModal(dia)"
+    class="border p-1 cursor-pointer hover:bg-blue-100"
+  >
+    {{ dia.getDate() }}
+  </div>
+  }
+</div>
+} @case (2) {
+
+<div class="grid grid-cols-3 gap-4">
+  @for (mes of meses; track mes) {
+  <div>
+    <h3>{{ nombreMes(mes) }}</h3>
+    <table class="border text-xs w-full">
+      <thead>
+        <tr>
+          <th>L</th>
+          <th>M</th>
+          <th>X</th>
+          <th>J</th>
+          <th>V</th>
+          <th>S</th>
+          <th>D</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (semana of semanasDelMes(mesActual); track semana) {
+        <tr>
+          @for (dia of semana; track dia) {
+          <td
+            (click)="dia && abrirModal(dia)"
+            class="border p-1 text-center cursor-pointer hover:bg-blue-100"
+          >
+            {{ dia ? dia.getDate() : "" }}
+          </td>
+          }
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</div>
+} @case (3) {
+<h2>{{ formatoDia(diaSeleccionado) }}</h2>
+@for (hora of horas; track hora) {
+<div (click)="onClickCelda(diaSeleccionado, hora)">{{ hora }} - Libre</div>
+} } } @if (modalAbierto) {
+<div class="modal-overlay" (click)="cerrarModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>{{ formatoDia(diaSeleccionado) }}</h2>
+    @for (hora of horas; track hora) {
+    <div (click)="onClickCelda(diaSeleccionado, hora)">{{ hora }} — Libre</div>
+    }
+    <button (click)="cerrarModal()">Cerrar</button>
   </div>
 </div>
 }

@@ -98,17 +98,32 @@ router.post('/datos', async (req: Request, res: Response) => {
   }
 });
 
-//horarios/notis
 router.post('/notis/guardias', async (req: Request, res: Response) => {
+  if (!req.files || !req.files['file']) {
+    return res.status(400).send('No se subió ningún archivo.');
+  }
+
+  const file = req.files['file']; 
+  let fileData: Buffer;
+
+  if (Array.isArray(file)) {
+    return res.status(400).send('Solo se permite subir un archivo a la vez.');
+  } else {
+    fileData = file.data; 
+  }
+
   const { id_profesor, horario } = req.body;
+
   if (!id_profesor || !horario) {
     return res.status(400).json({ message: 'Faltan parámetros necesarios' });
   }
+
   try {
     const result = await queryDb(
-      'INSERT INTO guardias (id_profesor, horario) VALUES (?, ?)',
-      [id_profesor, JSON.stringify(horario)] 
+      'INSERT INTO guardias (id_profesor, horario, justificante) VALUES (?, ?, ?)',
+      [id_profesor, JSON.stringify(horario), fileData]
     );
+
     return res.status(201).json({ message: 'Profesor insertado correctamente' });
   } catch (err) {
     console.error('Error en el servidor: ', err);

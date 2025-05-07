@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import authRouter from '../src/service/auth';  
 import datosRouter from '../src/service/datos'; 
+import fileUpload from 'express-fileupload';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
 const browserDistFolder = resolve(serverDistFolder, '../browser');
@@ -14,12 +15,13 @@ const app = express();
 const angularApp = new AngularNodeAppEngine();
 
 
+
 app.use(cors({ 
   origin: 'http://localhost:4200', 
   credentials: true 
 }));
 
-
+app.use(fileUpload()); 
 app.use(bodyParser.json()); 
 
 app.use('/api', datosRouter); 

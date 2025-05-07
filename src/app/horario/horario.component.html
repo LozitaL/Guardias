@@ -1,4 +1,4 @@
-@let dias = ["Lunes","Martes","Miércoles","Jueves","Viernes"]; @let horas =
+@let dias = ["lunes","martes","miércoles","jueves","viernes"]; @let horas =
 ["8:30-9:25","9:25-10:20","10:40-11:35","11:35-12:30","12:40-13:35","13:35-14:30"];
 @switch (modoEdicion) { @case(true) {
 <table>
@@ -29,6 +29,7 @@
 
       @for (dia of dias; track dia) { @let dato = getDatos(dia); @if(dato[idx]!=
       null) {
+
       <td>
         <input
           type="text"
@@ -66,7 +67,6 @@
         </select>
         }
       </td>
-
       } @else {
       <td>
         <input

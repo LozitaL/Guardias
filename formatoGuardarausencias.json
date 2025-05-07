@@ -1,0 +1,11 @@
+{
+    "fecha":{
+        "dias":[{"date":""},{"date":""}],
+        "mes":[{"date":""},{"date":""}], 
+        "año":""
+    },
+    "ausencias":{
+        "nombre":"",
+        "faltas":[{"curso":"","clase":""}]
+    }
+}

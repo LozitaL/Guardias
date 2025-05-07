@@ -12,6 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 export class HorarioComponent {
   userHorario: any | null = null;
   id_profesor: any | null = null;
+  nombre : string = "";
   private destroy$ = new Subject<void>();
 
   constructor(private authService: AuthService) {}
@@ -23,6 +24,7 @@ export class HorarioComponent {
         if (userD) {
           this.id_profesor = userD.id;
           this.userHorario = userD.horario;
+          this.nombre = userD.nombre+" "+userD.apellidos;
         }
       });
   }
@@ -53,9 +55,42 @@ export class HorarioComponent {
   }
 
   modoEdicion: boolean = false;
-  
+  addGuardia: boolean = false;
+  EditGuardia(): void {
+    this.addGuardia = true;
+  }
   Editar(): void{
     this.modoEdicion = true;
+  }
+  onAgregarGuardia(dia: string, campo:'profes', valor: string, idx: number){
+    if (!this.userHorario) {
+      this.userHorario = {};
+    }
+  
+    if (!this.userHorario[dia]) {
+      this.userHorario[dia] = [];
+    }
+  
+    if (!this.userHorario[dia][idx]) {
+      this.userHorario[dia][idx] = {};
+    }
+   
+
+    const celda = this.userHorario[dia][idx];
+    if (valor.trim() === '') {
+      delete celda[campo];
+    } else {
+      celda[campo] = valor;
+    }
+
+
+    if (!celda.asignatura && !celda.curso && !celda.clase) {
+      this.userHorario[dia][idx] = {"hora":"","profes":""};
+    }
+    if (typeof this.userHorario[dia][idx] !== 'object' || this.userHorario[dia][idx] === null) {
+      this.userHorario[dia][idx] = {"hora":"","profes":""};
+    }
+
   }
   onEditarCelda(dia: string, campo: 'asignatura' | 'curso' | 'clase' | 'hora', valor: string, idx: number) {
     if (!this.userHorario) {
