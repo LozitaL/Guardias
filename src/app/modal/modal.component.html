@@ -14,10 +14,12 @@
     <app-guardias></app-guardias>
     } @case ('Ausencias') {
     <app-ausencias></app-ausencias>
-    } @case('Documentos') {
+    } @case('Documentos') { @if (roll == 'admin') {
+    <app-docadmin></app-docadmin>
+    }@else{
     <h2>Documentos</h2>
-    <p>Consulta tus documentos aquí.</p>
-    } @default {
+    <app-docusers></app-docusers>
+    } } @default {
     <app-horario></app-horario>
     } }
   </main>

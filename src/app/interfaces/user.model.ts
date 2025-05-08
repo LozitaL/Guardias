@@ -4,5 +4,6 @@ export interface User {
     apellidos: string;
     curso: string;
     foto: string;
-    horario: JSON; 
+    horario: JSON;
+    roll: string; 
   }

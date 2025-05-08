@@ -39,7 +39,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
     );
     this.DataUser = this.currentDataUser.asObservable();
   }
-
+  //profesores/id
   datos(id: string): Promise<any> {
     return fetch(`${this.apiUrldatos}/${id}`, {
       method: 'GET',
@@ -62,6 +62,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
         return Promise.reject(error);
       });
   }
+  //todos los horario/profesores
   async getHorariosProfesores(): Promise<any[]> {
     const response = await fetch(`${this.apiUrldatos}/horarios`, {
       method: 'GET',
@@ -74,7 +75,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
   
     return response.json();
   }
-  
+  // guarda nombre apellidos curso, foto y horario, no obligatorio todos los datos
   async inrtDatos(nombre: string, apellidos: string, curso: string, foto: string, horario?: Horario){
      
       const response = await fetch(`${this.apiUrldatos}`, {
@@ -89,7 +90,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
     
       return response.json();
   }
-
+  //actualiza el horario de profesor/id
   async updateHorario(id: number, horario: JSON): Promise<any> {
     try {
         const response = await fetch(`${this.apiUrldatos}/${id}/ac`, {
@@ -110,6 +111,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
         throw error;
     }
 }
+//añade ausencia en guardia (cambiar nombre) a la tabla  
 async insertGuardias(id_profesor: number, horario: JSON, fileData: File): Promise<any> {
   const formData = new FormData();
   formData.append('id_profesor', id_profesor.toString());
@@ -128,7 +130,7 @@ async insertGuardias(id_profesor: number, horario: JSON, fileData: File): Promis
 
   return response.json();
 }
-
+//obtiene todas las ausencias/horario de guardias 
 async getAusencias(): Promise<any[]> {
   const response = await fetch(`${this.apiUrldatos}/ausencias`, {
     method: 'GET',
@@ -142,7 +144,7 @@ async getAusencias(): Promise<any[]> {
   return response.json();
 }
 
-
+//un login y ya
 login(username: string, password: string): Promise<any> {
   return fetch(this.apiUrl, {
     method: 'POST',
@@ -174,7 +176,7 @@ login(username: string, password: string): Promise<any> {
     });
 }
   
-
+  //pa cerrar sesion
   logout(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('currentUser');

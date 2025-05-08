@@ -6,7 +6,7 @@ const router = express.Router();
 //actualizas datos de prrofesores
 router.put('/datos/:id/ac', async (req, res) => {
   const { id } = req.params;
-  const { nombre, apellidos, curso, foto, horario } = req.body;
+  const { nombre, apellidos, curso, foto, horario, roll } = req.body;
 
   let updateQuery = 'UPDATE profesores SET ';
   const values = [];
@@ -32,7 +32,7 @@ router.put('/datos/:id/ac', async (req, res) => {
     fieldsToUpdate.push('horario = ?');
     values.push(JSON.stringify(horario));
   }
-
+  
   if (fieldsToUpdate.length === 0) {
     return res.status(400).json({ error: 'No fields to update' });
   }
@@ -111,6 +111,7 @@ router.get('/datos/:id', async (req: Request, res: Response) => {
       curso: Datos.curso,
       foto: Datos.foto,
       horario: Datos.horario,
+      roll: Datos.roll
     });
   } catch (err) {
     console.error('Error en el servidor:', err);
