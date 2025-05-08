@@ -35,27 +35,27 @@
           type="text"
           [value]="dato[idx]?.asignatura || ''"
           (input)="
-            onEditarCelda(dia, 'asignatura', $any($event.target).value, idx)
+            onEditarCelda(dia, 'asignatura', $any($event.target).value, idx,  (dato[idx].hora || hora))
           "
           placeholder="Asignatura"
         /><br />
         <input
           type="text"
           [value]="dato[idx]?.curso || ''"
-          (input)="onEditarCelda(dia, 'curso', $any($event.target).value, idx)"
+          (input)="onEditarCelda(dia, 'curso', $any($event.target).value, idx, dato[idx].hora || hora)"
           placeholder="Curso"
         /><br />
         <input
           type="text"
           [value]="dato[idx]?.clase || ''"
-          (input)="onEditarCelda(dia, 'clase', $any($event.target).value, idx)"
+          (input)="onEditarCelda(dia, 'clase', $any($event.target).value, idx, dato[idx].hora || hora)"
           placeholder="Clase"
         />
         @if (hora == "10:40-11:35" || hora == "11:35-12:30") {
         <label>Seleccionar hora:</label>
         <select
           [value]="dato[idx]?.hora || hora"
-          (change)="onEditarCelda(dia, 'hora', $any($event.target).value, idx)"
+          (change)="onEditarCelda(dia, 'hora', $any($event.target).value, idx,  dato[idx].hora || hora)"
         >
           @if (hora == "10:40-11:35") {
           <option value="10:20-11:15">10:20-11:15</option>
@@ -73,27 +73,27 @@
           type="text"
           [value]="''"
           (input)="
-            onEditarCelda(dia, 'asignatura', $any($event.target).value, idx)
+            onEditarCelda(dia, 'asignatura', $any($event.target).value, idx, dato[idx].hora || hora)
           "
           placeholder="Asignatura"
         /><br />
         <input
           type="text"
           [value]="''"
-          (input)="onEditarCelda(dia, 'curso', $any($event.target).value, idx)"
+          (input)="onEditarCelda(dia, 'curso', $any($event.target).value, idx, dato[idx].hora || hora)"
           placeholder="Curso"
         /><br />
         <input
           type="text"
           [value]="''"
-          (input)="onEditarCelda(dia, 'clase', $any($event.target).value, idx)"
+          (input)="onEditarCelda(dia, 'clase', $any($event.target).value, idx, dato[idx].hora || hora)"
           placeholder="Clase"
         />
         @if (hora == "10:40-11:35" || hora == "11:35-12:30") {
         <label>Seleccionar hora:</label>
         <select
           [value]="dato[idx]?.hora || hora"
-          (change)="onEditarCelda(dia, 'hora', $any($event.target).value, idx)"
+          (change)="onEditarCelda(dia, 'hora', $any($event.target).value, idx, dato[idx].hora || hora)"
         >
           @if (hora == "10:40-11:35") {
           <option value="10:20-11:15">10:20-11:15</option>

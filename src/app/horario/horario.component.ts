@@ -13,8 +13,9 @@ export class HorarioComponent {
   userHorario: any | null = null;
   id_profesor: any | null = null;
   nombre : string = "";
+  todosHorarios: any[] = [];
   private destroy$ = new Subject<void>();
-
+  coincidenciasGuardias: any[] = [];
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
@@ -25,10 +26,38 @@ export class HorarioComponent {
         if (userD) {
           this.id_profesor = userD.id;
           this.userHorario = userD.horario;     
+          this.nombre = userD.nombre;
         }
       });
-      console.log(this.authService.comprobarGuardias(this.id_profesor));
-
+      this.authService.getHorariosProfesores().then(horarios => {
+        this.todosHorarios = horarios;      
+        this.coincidenciasGuardias = this.buscarGuardiasCoincidentes(horarios);
+      });
+  }
+  buscarGuardiasCoincidentes(horarios: any[]): any[] {
+    const coincidencias: { dia: string; hora: string; profesores: string[] }[] = [];
+    const dias = ["lunes", "martes", "miércoles", "jueves", "viernes"];
+    for (const dia of dias) {
+      const numFranjas = horarios[0]?.horario[dia]?.length || 0;
+      for (let i = 0; i < numFranjas; i++) {
+        const profesoresEnGuardia = horarios
+          .filter(h => h.horario[dia] && h.horario[dia][i]?.asignatura?.toLowerCase() === "guardias")
+          .map(h => h.nombre);
+  
+        const horaValida = horarios
+          .map(h => h.horario[dia]?.[i]?.hora)
+          .find(hora => hora && hora.trim() !== "");
+  
+        if (profesoresEnGuardia.length > 1 && horaValida) {
+          coincidencias.push({
+            dia,
+            hora: horaValida,
+            profesores: profesoresEnGuardia
+          });
+        }
+      }
+    }
+    return coincidencias;
   }
 
   /*getDias(): string[] {
@@ -62,8 +91,8 @@ export class HorarioComponent {
   Editar(): void{
     this.modoEdicion = true;
   }
-
-  onEditarCelda(dia: string, campo: 'asignatura' | 'curso' | 'clase' | 'hora', valor: string, idx: number) {
+  
+  onEditarCelda(dia: string, campo: 'asignatura' | 'curso' | 'clase' | 'hora', valor: string, idx: number, hora: string) {
     if (!this.userHorario) {
       this.userHorario = {};
     }
@@ -83,18 +112,34 @@ export class HorarioComponent {
     } else {
       celda[campo] = valor;
     }
-     
-    if (campo === 'asignatura' && (valor.toLowerCase() === 'guardia')) {
-      celda['clase'] = this.nombre;
+    if (campo === 'asignatura' && (valor.toLowerCase() === 'guardias')) {
+      const coincidencia = this.coincidenciasGuardias.find(
+        c => c.dia === dia && c.hora === hora
+      );
+      if (coincidencia) {
+        celda['clase'] = coincidencia.profesores.join(' ');
+      } else {
+        celda['clase'] = this.nombre; 
+      }
     }
     if (!celda.asignatura && !celda.curso && !celda.clase) {
-      this.userHorario[dia][idx] = {"hora":"","clase":"","curso":"","asignatura":""};
+      this.userHorario[dia][idx] = {"hora":hora,"clase":"","curso":"","asignatura":""};
     }
     if (typeof this.userHorario[dia][idx] !== 'object' || this.userHorario[dia][idx] === null) {
-      this.userHorario[dia][idx] = {"hora":"","clase":"","curso":"","asignatura":""};
+      this.userHorario[dia][idx] = {"hora":hora,"clase":"","curso":"","asignatura":""};
     }
   }
-  
+
+  getProfesoresPorDiaYHora(horarios: any[], dia: string, hora: string): string[] {
+    return horarios
+      .filter(h =>
+        h.horario[dia]?.some(
+          (franja: any) =>
+            franja.hora === hora && franja.asignatura?.toLowerCase() === 'guardia'
+        )
+      )
+      .map(h => h.nombre);
+  }
 
   guardarCambios() {
     if (!this.userHorario) return;

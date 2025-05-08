@@ -40,77 +40,6 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
     this.DataUser = this.currentDataUser.asObservable();
   }
 
-
-  async comprobarGuardias(id_profesor: number): Promise<{ nombre: string; apellidos: string; dia: string; hora: string }[]> {
-    try {
-      // Obtener todos los horarios de los maestros
-      const response = await fetch(`${this.apiUrldatos}/horarios`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-  
-      if (!response.ok) {
-        throw new Error(`Error en la solicitud: ${response.status} ${response.statusText}`);
-      }
-  
-      const horarios = await response.json();
-  
-      // Obtener el horario del profesor actual
-      const miHorarioResponse = await fetch(`${this.apiUrldatos}/${id_profesor}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-  
-      if (!miHorarioResponse.ok) {
-        throw new Error(`Error al obtener tu horario: ${miHorarioResponse.status} ${miHorarioResponse.statusText}`);
-      }
-  
-      const miHorario = await miHorarioResponse.json();
-  
-      if (!miHorario || !miHorario.horario) {
-        throw new Error('El horario no se encontró o está vacío.');
-      }
-  
-      if (typeof miHorario.horario !== 'object' || miHorario.horario === null) {
-        throw new Error('El horario no tiene el formato esperado.');
-      }
-  
-      // Filtrar las horas donde el profesor actual tiene "guardias"
-      const guardias = Object.entries(miHorario.horario as Record<string, any[]>).flatMap(([dia, horas]) =>
-        horas
-          .filter((hora: any) => hora.asignatura && hora.asignatura.toLowerCase() === 'guardia')
-          .map((hora: any) => ({ dia, hora: hora.hora }))
-      );
-  
-      // Buscar coincidencias de guardias con otros maestros
-      const coincidencias: { nombre: string; apellidos: string; dia: string; hora: string }[] = [];
-  
-      for (const { dia, hora } of guardias) {
-        horarios.forEach((horario: any) => {
-          if (horario.id !== id_profesor && horario.horario && horario.horario[dia]) {
-            const tieneGuardia = horario.horario[dia].some(
-              (h: any) => h.hora.trim() === hora.trim() && h.asignatura.toLowerCase() === 'guardia'
-            );
-            if (tieneGuardia) {
-              coincidencias.push({
-                nombre: horario.nombre,
-                apellidos: horario.apellidos,
-                dia,
-                hora,
-              });
-            }
-          }
-        });
-      }
-  
-      return coincidencias;
-    } catch (error) {
-      console.error('Error al comprobar guardias:', error);
-      throw error;
-    }
-  }
-
-  //datos de profesor
   datos(id: string): Promise<any> {
     return fetch(`${this.apiUrldatos}/${id}`, {
       method: 'GET',
@@ -133,7 +62,19 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
         return Promise.reject(error);
       });
   }
-
+  async getHorariosProfesores(): Promise<any[]> {
+    const response = await fetch(`${this.apiUrldatos}/horarios`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+  
+    if (!response.ok) {
+      throw new Error(`Error al obtener los horarios: ${response.status} ${response.statusText}`);
+    }
+  
+    return response.json();
+  }
+  
   async inrtDatos(nombre: string, apellidos: string, curso: string, foto: string, horario?: Horario){
      
       const response = await fetch(`${this.apiUrldatos}`, {
@@ -188,8 +129,20 @@ async insertGuardias(id_profesor: number, horario: JSON, fileData: File): Promis
   return response.json();
 }
 
+async getAusencias(): Promise<any[]> {
+  const response = await fetch(`${this.apiUrldatos}/ausencias`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
 
-//Opciones de usuario
+  if (!response.ok) {
+    throw new Error(`Error al obtener las ausencias: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+}
+
+
 login(username: string, password: string): Promise<any> {
   return fetch(this.apiUrl, {
     method: 'POST',
@@ -229,7 +182,7 @@ login(username: string, password: string): Promise<any> {
     this.currentUserSubject.next(null);
     this.router.navigate(['']);
   }
-  //Datos de sesion
+
   getCurrentUser(): any {
     return this.currentUserSubject.value;
   }

@@ -1,1 +1,35 @@
+.guardias-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-family: Arial, sans-serif;
+  background: #f8f9fa;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
 
+.guardias-tabla th, .guardias-tabla td {
+  border: 1px solid #dee2e6;
+  padding: 12px 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.guardias-tabla th {
+  background: #b1b1b1;
+  color: #000000;
+  font-weight: bold;
+}
+
+.guardias-tabla tr:nth-child(even) {
+  background: #f1f3f5;
+}
+.ausencia-caja {
+  display: inline-block;
+  background: #ffeeba;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  margin: 2px 6px 2px 0;
+  padding: 6px 10px;
+  min-width: 80px;
+  text-align: center;
+}

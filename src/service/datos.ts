@@ -73,6 +73,23 @@ router.get('/datos/horarios', async (req: Request, res: Response) => {
   }
 });
 
+router.get('/datos/ausencias', async (req: Request, res: Response) => {
+  try {
+    const results = await queryDb('SELECT * FROM guardias', []);
+
+    if (results.length === 0) {
+      return res.status(404).json({ message: 'No se encontraron ausencias' });
+    }
+
+    return res.json(results);
+
+  } catch (err) {
+    console.error('Error al obtener los horarios:', err);
+    return res.status(500).json({ message: 'Error interno del servidor' });
+  }
+});
+
+
 //profesores/datos:id obtienes datos de profesores
 router.get('/datos/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
