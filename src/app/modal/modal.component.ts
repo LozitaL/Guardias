@@ -19,8 +19,8 @@ import { Subject } from 'rxjs';
 export class ModalComponent {
   currentView: string = ''; 
   roll: string = 'usuario'
-  constructor(private authService: AuthService) {}
   private destroy$ = new Subject<void>();
+  constructor(private authService: AuthService) {}  
   ngOnInit(): void {
       this.authService.getCurrentDataUser()
         .pipe(takeUntil(this.destroy$))
@@ -29,9 +29,7 @@ export class ModalComponent {
             this.roll = userD.roll;
           }
         });}
-    
   changeView(view: string): void {
     this.currentView = view;
-
   }
 }

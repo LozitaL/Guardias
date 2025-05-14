@@ -21,10 +21,10 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
 
   private apiUrlGuardias = 'http://localhost:4000/api/notis'
   
+  //Cnstr Guarda los datos 
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private router: Router,) {
     let storedUser = null;
     let datosUser = null;
-  //datos guardados
     if (isPlatformBrowser(this.platformId)) {
       storedUser = localStorage.getItem('currentUser');
       datosUser = localStorage.getItem('DataUser');
@@ -38,8 +38,9 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
       datosUser ? JSON.parse(datosUser) : null
     );
     this.DataUser = this.currentDataUser.asObservable();
-  }
-  //profesores/id
+  };
+
+  //(Get)*Datos(id) Profesores"
   datos(id: string): Promise<any> {
     return fetch(`${this.apiUrldatos}/${id}`, {
       method: 'GET',
@@ -62,7 +63,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
         return Promise.reject(error);
       });
   }
-  //todos los horario/profesores
+  //Get()*Horarios Profesores" 
   async getHorariosProfesores(): Promise<any[]> {
     const response = await fetch(`${this.apiUrldatos}/horarios`, {
       method: 'GET',
@@ -75,7 +76,20 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
   
     return response.json();
   }
-  // guarda nombre apellidos curso, foto y horario, no obligatorio todos los datos
+//(Get)obti/*datos Guardias"
+async getAusencias(): Promise<any[]> {
+  const response = await fetch(`${this.apiUrldatos}/ausencias`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Error al obtener las ausencias: ${response.status} ${response.statusText}`);
+  }
+
+  return response.json();
+}
+  //(Post)insrt/nombre/apellidos/curso/foto/horario Profesores"
   async inrtDatos(nombre: string, apellidos: string, curso: string, foto: string, horario?: Horario){
      
       const response = await fetch(`${this.apiUrldatos}`, {
@@ -90,7 +104,7 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
     
       return response.json();
   }
-  //actualiza el horario de profesor/id
+  //(Post)actu/horario(id)
   async updateHorario(id: number, horario: JSON): Promise<any> {
     try {
         const response = await fetch(`${this.apiUrldatos}/${id}/ac`, {
@@ -111,12 +125,14 @@ private apiUrldatos = 'http://localhost:4000/api/datos'
         throw error;
     }
 }
-//añade ausencia en guardia (cambiar nombre) a la tabla  
-async insertGuardias(id_profesor: number, horario: JSON, fileData: File): Promise<any> {
+//(Post)insrt/horario/justificante (id_profesor) Guardias"
+async insertGuardias(id_profesor: number, horario: JSON, fileData?: File): Promise<any> {
   const formData = new FormData();
   formData.append('id_profesor', id_profesor.toString());
   formData.append('horario', JSON.stringify(horario));
-  formData.append('file', fileData); 
+  if (fileData) {
+    formData.append('file', fileData);
+  }
 
   const response = await fetch(`${this.apiUrlGuardias}/guardias`, {
     method: 'POST',
@@ -130,21 +146,8 @@ async insertGuardias(id_profesor: number, horario: JSON, fileData: File): Promis
 
   return response.json();
 }
-//obtiene todas las ausencias/horario de guardias 
-async getAusencias(): Promise<any[]> {
-  const response = await fetch(`${this.apiUrldatos}/ausencias`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  });
 
-  if (!response.ok) {
-    throw new Error(`Error al obtener las ausencias: ${response.status} ${response.statusText}`);
-  }
-
-  return response.json();
-}
-
-//un login y ya
+//(Post)lg/nombre/contraseña Credenciales
 login(username: string, password: string): Promise<any> {
   return fetch(this.apiUrl, {
     method: 'POST',
@@ -175,24 +178,24 @@ login(username: string, password: string): Promise<any> {
       return Promise.reject(error);
     });
 }
-  
-  //pa cerrar sesion
-  logout(): void {
+//Fn Cerrar Sesion
+logout(): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('currentUser');
     }
     this.currentUserSubject.next(null);
     this.router.navigate(['']);
   }
-
-  getCurrentUser(): any {
+//Fn Info de usuario en Sesion
+getCurrentUser(): any {
     return this.currentUserSubject.value;
   }
-  getCurrentDataUser(): Observable<User | null> {
+//Fn Datos de usuario en Sesion
+getCurrentDataUser(): Observable<User | null> {
     return this.currentDataUser.asObservable();
   }
 
-  isAuthenticated(): boolean {
+isAuthenticated(): boolean {
     return !!this.getCurrentUser();
   }
 }

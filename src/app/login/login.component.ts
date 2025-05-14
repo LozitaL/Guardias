@@ -15,18 +15,13 @@ export class LoginComponent {
   loginForm: FormGroup;
   errorMessage: string = '';
 
-  constructor(
-    private fb: FormBuilder,
-    private authService: AuthService,
-    private router: Router
-  ) {
-    this.loginForm = this.fb.group({
-      username: ['', [Validators.required]],
-      password: ['', [Validators.required]],
+  constructor(private fb: FormBuilder,private authService: AuthService,private router: Router) {
+    this.loginForm = this.fb.group({username: ['', [Validators.required]],password: ['', [Validators.required]],
+
     });
   }
 
-  
+  //Fn Comprobar Credenciales 
   async onSubmit() {
     if (this.loginForm.invalid) {
       return;
@@ -46,5 +41,7 @@ export class LoginComponent {
       this.errorMessage = 'Error al iniciar sesión';
     }
   }
+  //Fn Registro
+  //Fn 
   
 }

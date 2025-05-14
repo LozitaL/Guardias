@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './docadmin.component.css'
 })
 export class DocadminComponent {
-
+  
 }

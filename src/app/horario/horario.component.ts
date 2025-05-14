@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { User } from '../interfaces/user.model';
 import { Subject } from 'rxjs';
@@ -9,13 +9,14 @@ import { takeUntil } from 'rxjs/operators';
   templateUrl: './horario.component.html',
   styleUrl: './horario.component.css'
 })
-export class HorarioComponent {
+export class HorarioComponent  implements OnDestroy{
   userHorario: any | null = null;
   id_profesor: any | null = null;
   nombre : string = "";
   todosHorarios: any[] = [];
   private destroy$ = new Subject<void>();
   coincidenciasGuardias: any[] = [];
+
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
@@ -59,7 +60,6 @@ export class HorarioComponent {
     }
     return coincidencias;
   }
-
   /*getDias(): string[] {
     return this.userHorario ? Object.keys(this.userHorario) : [];
   }*/
@@ -78,20 +78,18 @@ export class HorarioComponent {
     }
     return datos;
   }
-  
-
+  //IMPORTANTE, cierra los observables por fugas
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
-
   modoEdicion: boolean = false;
   addGuardia: boolean = false;
-  
+  //Editar Horario
   Editar(): void{
     this.modoEdicion = true;
   }
-  
+  //Fn Guarda el valor de cada celda en Horario
   onEditarCelda(dia: string, campo: 'asignatura' | 'curso' | 'clase' | 'hora', valor: string, idx: number, hora: string) {
     if (!this.userHorario) {
       this.userHorario = {};
@@ -129,7 +127,7 @@ export class HorarioComponent {
       this.userHorario[dia][idx] = {"hora":hora,"clase":"","curso":"","asignatura":""};
     }
   }
-
+  //Fn para mostrar profes en guardias
   getProfesoresPorDiaYHora(horarios: any[], dia: string, hora: string): string[] {
     return horarios
       .filter(h =>
@@ -140,7 +138,7 @@ export class HorarioComponent {
       )
       .map(h => h.nombre);
   }
-
+  //Fn para actualizar horario
   guardarCambios() {
     if (!this.userHorario) return;
   
@@ -154,4 +152,5 @@ export class HorarioComponent {
         console.error('Error al actualizar datos:', error);
       });
   }
+
   }

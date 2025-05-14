@@ -193,14 +193,16 @@ export class AusenciasComponent {
         this.uploadFile(fileData);
       };
       reader.readAsArrayBuffer(this.selectedFile);
+      const ausenciasJSON = JSON.stringify(this.ausencias);
+      this.authService.insertGuardias(this.id_profesor,JSON.parse(ausenciasJSON),this.selectedFile)
+      this.ausencias.faltas = [];
+      this.cerrarmodal2();
     } else {
-      console.error('No se ha seleccionado ningún archivo.');
-      return; 
-    }
-    const ausenciasJSON = JSON.stringify(this.ausencias);
-    this.authService.insertGuardias(this.id_profesor,JSON.parse(ausenciasJSON),this.selectedFile)
+      const ausenciasJSON = JSON.stringify(this.ausencias);
+    this.authService.insertGuardias(this.id_profesor,JSON.parse(ausenciasJSON))
     this.ausencias.faltas = [];
     this.cerrarmodal2();
+    }
   }
   uploadFile(fileData: ArrayBuffer): void {
     const formData = new FormData();

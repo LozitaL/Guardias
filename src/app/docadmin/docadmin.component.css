@@ -1,0 +1,51 @@
+.tabla {
+  width: 100%;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.buscador {
+  background-color: #e9ecef;
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.profe {
+  background-color: #f2eaea;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+  transition: background-color 0.3s;
+}
+
+.profe:hover {
+  background-color: #e4dcdc;
+}
+
+.hijas {
+  display: flex;
+  flex-direction: column;
+  background-color: #fdfdfd;
+}
+
+.hija {
+  display: flex;
+  border-top: 1px solid #ddd;
+  padding: 10px;
+  align-items: center;
+}
+
+.hija .fecha {
+  width: 10%;
+  height: 50%;
+}
+
+.hija .contenido {
+  flex: 1;
+  background-color: #e5e3e3;
+  padding: 5px 10px;
+  border-radius: 5px;
+}

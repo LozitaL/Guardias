@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import db from '../db/db';  
 
 const router = express.Router();
-
+//Fn Inicio Sesion
 router.post('/login', async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
@@ -31,6 +31,10 @@ router.post('/login', async (req: Request, res: Response) => {
     return res.status(500).json({ message: 'Error en el servidor' });
   }
 });
+
+//Fn Registro
+//Fn Recuperar Sesion
+//Fn
 
 const queryDb = (query: string, values: any[]) => {
   return new Promise<any[]>((resolve, reject) => {

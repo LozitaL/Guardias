@@ -21,7 +21,9 @@ export class GuardiasComponent {
     ausencias: any [] = [];
     horario: any[] = [];
     faltas: any[] = [];
+
   constructor(private authService: AuthService) {}
+
   ngOnInit(): void {
     this.authService.getCurrentDataUser()
       .pipe(takeUntil(this.destroy$))
@@ -41,7 +43,6 @@ export class GuardiasComponent {
       }));
       this.extractHorarios();
       this.faltas = this.extractFaltasData();
-      console.log(this.faltas);
     });
   }
 
